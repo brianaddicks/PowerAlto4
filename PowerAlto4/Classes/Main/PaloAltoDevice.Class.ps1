@@ -1,7 +1,17 @@
 class PaloAltoDevice {
+    [string]$Name
     [string]$Model
+    [string]$Serial
     [string]$Hostname
     [string]$ApiKey
+
+    # Verion info
+    [string]$OsVersion
+    [string]$GpAgent
+    [string]$AppVersion
+    [string]$ThreatVersion
+    [string]$WildFireVersion
+    [string]$UrlVersion
 
     [ValidateRange(1,65535)]
     [int]$Port = 443
@@ -32,36 +42,40 @@ class PaloAltoDevice {
     }
 
     # Generate Api URL
-    [String] getApiUrl() {
-        if ($this.DeviceAddress) {
-            #$url = $this.Protocol + "://" + $this.getDeviceAddress() + ":" + $this.Port + "/api/"
-            $url = "https://" + $this.Hostname + "/api/"
+    [String] getApiUrl([string]$formattedQueryString) {
+        if ($this.Hostname) {
+            $url = "https://" + $this.Hostname + "/api/" + $formattedQueryString
             return $url
         } else {
             return $null
         }
     }
 
-    # Invoke Api Query
+    ##################################### Main Api Query Function #####################################
+    # invokeApiQuery
     [xml] invokeApiQuery([hashtable]$queryString) {
-        $formattedQueryString = [HelperWeb]::createQueryString($queryString)
-        $url = $this.getApiUrl() + $formattedQueryString
-
-        # keygen query or not?
+        # If the query is not a keygen query we need to append the apikey to the query string
         if ($queryString.type -ne "keygen") {
-            return $null
+            $queryString.key = $this.ApiKey
+        }
+
+        # format the query string and general the full url
+        $formattedQueryString = [HelperWeb]::createQueryString($queryString)
+        $url                  = $this.getApiUrl($formattedQueryString)
+
+        # Populate Query/Url History
+        # Redact password if it's a keygen query
+        if ($queryString.type -ne "keygen") {
+            $this.UrlHistory += $url
+            $this.QueryHistory += $queryString
         } else {
             $this.UrlHistory += $url.Replace($queryString.password,"PASSWORDREDACTED")
-            return $null
+            $this.QueryHistory += $queryString.Replace($queryString.password,"PASSWORDREDACTED")
         }
 
         # try query
         try {
-            #$ProgressPreferenceRemember = $ProgressPreference
-	        $ProgressPreference = "SilentlyContinue"
             $rawResult = Invoke-WebRequest -Uri $url -SkipCertificateCheck
-            #$this.Connected = $true
-            #$env:ProgressPreference = $ProgressPreferenceRemember
         } catch {
             Throw "$($error[0].ToString()) $($error[0].InvocationInfo.PositionMessage)"
         }
@@ -84,6 +98,38 @@ class PaloAltoDevice {
         return $result
     }
 
+    # Operational API Query
+    [xml] invokeOperationalQuery([string]$cmd) {
+        $queryString = @{}
+        $queryString.type = "op"
+        $queryString.cmd = $cmd
+        $result = $this.invokeApiQuery($queryString)
+        return $result
+    }
+
+    # Test Connection
+    [bool] testConnection() {
+        $result = $this.invokeOperationalQuery('<show><system><info></info></system></show>')
+        $this.Connected       = $true
+        $this.Name            = $result.response.result.system.devicename
+        $this.Hostname        = $result.response.result.system.'ip-address'
+        $this.Model           = $result.response.result.system.model
+        $this.Serial          = $result.response.result.system.serial
+        $this.OsVersion       = $result.response.result.system.'sw-version'
+        $this.GpAgent         = $result.response.result.system.'global-protect-client-package-version'
+        $this.AppVersion      = $result.response.result.system.'app-version'
+        $this.ThreatVersion   = $result.response.result.system.'threat-version'
+        $this.WildFireVersion = $result.response.result.system.'wildfire-version'
+        $this.UrlVersion      = $result.response.result.system.'url-filtering-version'
+        return $true
+    }
+
+    ##################################### Initiators #####################################
+    # Initiator with apikey
+    PaloAltoDevice([string]$Hostname,[string]$ApiKey) {
+        $this.Hostname = $Hostname
+        $this.ApiKey = $ApiKey
+    }
 
     # Initiator with Credential
     PaloAltoDevice([string]$Hostname,[PSCredential]$Credential) {

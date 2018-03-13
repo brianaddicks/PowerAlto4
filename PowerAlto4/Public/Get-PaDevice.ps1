@@ -50,7 +50,9 @@ function Get-PaDevice {
         [string]$ApiKey,
 
         [Parameter(ParameterSetName="Credential",Mandatory=$True,Position=1)]
-        [System.Management.Automation.CredentialAttribute()]$Credential,
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.Credential()]
+        $Credential,
 
 		[Parameter(Mandatory=$False,Position=2)]
 		[int]$Port = 443,
@@ -81,12 +83,9 @@ function Get-PaDevice {
             #$global.$global:PaDeviceObject.Hostname = $DeviceAddress
 			#$global:PaDeviceObject.Protocol = $Protocol
             #$global:PaDeviceObject.Port     = $Port
-            
-            $global:PaDeviceObject = [PaloAltoDevice]::new($DeviceAddress,$Credential)
+			
 
-            if ($ApiKey) {
-                $global:PaDeviceObject.ApiKey = $ApiKey
-            }
+            
 		}
     }
 
@@ -96,9 +95,19 @@ function Get-PaDevice {
             Write-Verbose "$VerbosePrefix Attempting to generate API Key."
 			#$global:PaDeviceObject.invokeKeygenQuery($Credential)
             Write-Verbose "$VerbosePrefix API Key successfully generated."
-        }
-
-        #$TestConnection = $global:PaDeviceObject.testConnection()
+		}
+		
+		if ($ApiKey) {
+			Write-Verbose "$VerbosePrefix Attempting to generate API Key."
+			$global:PaDeviceObject = [PaloAltoDevice]::new($DeviceAddress,$ApiKey)
+			Write-Verbose "$VerbosePrefix API Key successfully generated."
+		}
+		
+		# Test API connection
+		# When generating an api key, the connection is already tested.
+		# This grabs serial/version info from the box and tests if you're just
+		# supplying an api key yourself.
+		$global:PaDeviceObject = [PaloAltoDevice]::new($DeviceAddress,$Credential)
 
         if (!($Quiet)) {
             return $global:PaDeviceObject

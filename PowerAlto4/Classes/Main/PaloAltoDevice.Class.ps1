@@ -117,7 +117,31 @@ class PaloAltoDevice {
         $result = $this.invokeApiQuery($queryString)
         return $result
     }
-    
+
+    # invokeReportQuery
+    [Xml] invokeReportQuery([string]$ReportType,[string]$ReportName,[string]$Cmd) {
+        $queryString            = @{}
+        $queryString.type       = "report"
+        $queryString.reporttype = $ReportType
+        $queryString.reportname = $ReportName
+        $queryString.cmd        = $Cmd
+
+        $result = $this.invokeApiQuery($queryString)
+        return $result
+    }
+
+    # invokeReportGetQuery
+    [Xml] invokeReportGetQuery([int]$JobId) {
+        $queryString          = @{}
+        $queryString.type     = "report"
+        $queryString.action   = "get"
+        $queryString.'job-id' = $JobId
+
+        $result = $this.invokeApiQuery($queryString)
+        return $result
+    }
+
+    #  https://<firewall>/api/?type=report&action=get&job-id=jobid
 
     # Test Connection
     [bool] testConnection() {

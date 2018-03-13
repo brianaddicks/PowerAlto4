@@ -1,0 +1,6 @@
+site_name: PowerAlto4 Docs
+theme: readthedocs
+pages:
+  - Home: index.md
+  - Cmdlets:
+    - Get-PaDevice: cmdlets/Get-PaDevice.md

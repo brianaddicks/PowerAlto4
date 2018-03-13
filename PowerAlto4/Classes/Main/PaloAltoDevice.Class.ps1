@@ -107,6 +107,18 @@ class PaloAltoDevice {
         return $result
     }
 
+    # invokeConfigQuery
+    [Xml] invokeConfigQuery([string]$action,[string]$xPath) {
+        $queryString         = @{}
+        $queryString.type    = "config"
+        $queryString.action  = $action
+        $queryString.xpath   = $xPath
+
+        $result = $this.invokeApiQuery($queryString)
+        return $result
+    }
+    
+
     # Test Connection
     [bool] testConnection() {
         $result = $this.invokeOperationalQuery('<show><system><info></info></system></show>')

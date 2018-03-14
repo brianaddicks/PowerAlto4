@@ -26,8 +26,6 @@ function Invoke-PaCustomReport {
 
     BEGIN {
         $VerbosePrefix = "Invoke-PaCustomReport:"
-        # /config/devices/ entry/vsys/entry[@name='vsys1']/reports/entry[@name='report-abc']
-        # /config/shared/reports/entry[@name='ltg_overall-traffic']
         $ReportXPath = '/config/'
         
         if (!($Vsys)) {
@@ -42,7 +40,7 @@ function Invoke-PaCustomReport {
     PROCESS {
         # Get the config info for the report
         # This is required for the call to run the report
-        $ReportConfig = $Global:PaDeviceObject.invokeConfigQuery("get",$ReportXPath)
+        $ReportConfig = Invoke-PaApiConfig -Get -Xpath $ReportXPath
         
         # Extract the required xml
         $ReportXml = $ReportConfig.response.result.entry.InnerXml

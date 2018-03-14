@@ -44,20 +44,21 @@ function Get-PaCustomReport {
     PROCESS {
         # Get the config info for the report
         # This is required for the call to run the report
-        $ReportConfig = $Global:PaDeviceObject.invokeConfigQuery("get",$ReportXPath)
+        $ReportConfig = Invoke-PaApiConfig -Get -Xpath $ReportXPath
 
         $ReturnObject = @()
         foreach ($entry in $ReportConfig.response.result.reports.entry) {
             # Initialize Report object, add to returned array
             $Database      = ($entry.type | Get-Member -Type Property).Name
             Write-Verbose "$VerbosePrefix adding report: Name $($entry.name), Database $Database"
-            $Report        = [PaCustomReport]::new($entry.name,$Database)
+            $Report        = [PaCustomReport]::new($entry.name)
             $ReturnObject += $Report
             
             # Add other properties to report
+            $Report.Database     = $Database
             $Report.FirstColumn  = $entry.type.trsum.'aggregate-by'.member
             $Report.Members      = $entry.type.trsum.values.member
-            $Report.Period       = $entry.period
+            $Report.TimeFrame    = $entry.period
             $Report.EntriesShown = $entry.topn
             $Report.Groups       = $entry.topm
         }

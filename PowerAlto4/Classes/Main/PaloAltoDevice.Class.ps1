@@ -109,12 +109,24 @@ class PaloAltoDevice {
         return $result
     }
 
-    # invokeConfigQuery
-    [Xml] invokeConfigQuery([string]$action,[string]$xPath) {
+    # invokeConfigQuery without element
+    [Xml] invokeConfigQuery([string]$action,[string]$XPath) {
         $queryString         = @{}
         $queryString.type    = "config"
         $queryString.action  = $action
         $queryString.xpath   = $xPath
+
+        $result = $this.invokeApiQuery($queryString)
+        return $result
+    }
+
+    # invokeConfigQuery with element
+    [Xml] invokeConfigQuery([string]$action,[string]$XPath,[string]$Element) {
+        $queryString         = @{}
+        $queryString.type    = "config"
+        $queryString.action  = $action
+        $queryString.xpath   = $XPath
+        $queryString.element = $Element
 
         $result = $this.invokeApiQuery($queryString)
         return $result

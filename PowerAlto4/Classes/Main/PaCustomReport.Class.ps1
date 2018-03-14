@@ -9,7 +9,7 @@ class PaCustomReport {
     [string]$Database
     [string]$FirstColumn
     [string[]]$Members
-    [string]$Period
+    [string]$TimeFrame
     [int]$EntriesShown
     [int]$Groups
 
@@ -27,7 +27,7 @@ class PaCustomReport {
         $TypeNode = $Doc.CreateNode("element","type",$null)
 
         # Start DatabaseNode
-        $DatabaseShortName = $this.TranslateDatabaseName($this.Database)
+        $DatabaseShortName = $this.TranslateDatabaseName($this.Database,"short")
         $DatabaseNode = $Doc.CreateNode("element",$DatabaseShortName,$null)
         
         # aggregate-by propert (FirstColumn)
@@ -52,7 +52,22 @@ class PaCustomReport {
         # Add Type to Entry Node
         $EntryNode.AppendChild($TypeNode)
 
+        # Create/Add TimeFrame to Entry
+        $TimeFrameNode = $Doc.CreateNode("element",'period',$null)
+        $TimeFrameNode.InnerText = $this.TimeFrame
+        $EntryNode.AppendChild($TimeFrameNode)
 
+        # Create/Add EntriesShown to Entry
+        $EntriesShownNode = $Doc.CreateNode("element",'topn',$null)
+        $EntriesShownNode.InnerText = $this.EntriesShown
+        $EntryNode.AppendChild($EntriesShownNode)
+
+        # Create/Add Groups to Entry
+        $GroupsNode = $Doc.CreateNode("element",'topm',$null)
+        $GroupsNode.InnerText = $this.Groups
+        $EntryNode.AppendChild($GroupsNode)
+
+        # Append Entry to Root and Root to Doc
         $root.AppendChild($EntryNode)
         $Doc.AppendChild($root)
 
@@ -60,14 +75,14 @@ class PaCustomReport {
     }
 
     # Translate Database strings
-    [string] TranslateDatabaseName([string]$Name) {
+    [string] TranslateDatabaseName([string]$Name,[string]$DesiredType) {
         $DatabaseTranslations = @{}
         $DatabaseTranslations.trsum = "Traffic Summary"
 
         $TranslatedName = $null
-        if ($DatabaseTranslations.Keys -contains $Name) {
+        if (($DatabaseTranslations.Keys -contains $Name) -and ($DesiredType -eq "Friendly")) {
             $TranslatedName = $DatabaseTranslations.$Name
-        } elseif ($DatabaseTranslations.Values -contains $Name) {
+        } elseif (($DatabaseTranslations.Values -contains $Name) -and ($DesiredType -eq "Short")) {
             $TranslatedName = $DatabaseTranslations.Keys | Where-Object { $DatabaseTranslations["$_"] -eq $Name }
         } else {
             Throw "Invalid Database Name: $Name"
@@ -77,31 +92,8 @@ class PaCustomReport {
     }
 
     ##################################### Initiators #####################################
-    # Initiator with apikey
-    PaCustomReport([string]$Name,[ShortDatabase]$Database) {
+    # Initiator
+    PaCustomReport([string]$Name) {
         $this.Name = $Name
-        $this.Database = $this.TranslateDatabaseName($Database)
     }
 }
-
-<#
-<reports>
-<entry name="ltg_overall-traffic">
-<type>
-<trsum>
-<aggregate-by>
-<member>quarter-hour-of-receive_time</member>
-</aggregate-by>
-<values>
-<member>bytes</member>
-<member>sessions</member>
-</values>
-</trsum>
-</type>
-<period>last-24-hrs</period>
-<topn>100</topn>
-<topm>10</topm>
-<caption>ltg_overall-traffic</caption>
-</entry>
-</reports>
-#>

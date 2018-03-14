@@ -16,13 +16,21 @@ function Invoke-PaApiConfig {
     .PARAMETER XPath
 		XPath of desired configuration.
 	#>
-	[CmdletBinding()]
+	[CmdletBinding(DefaultParameterSetName = 'get')]
 
 	Param (
-		[Parameter(Mandatory=$True,Position=0)]
-		[ValidateSet("get")]
-		[string]$Action = "get",
+        # get parameters
+		[Parameter(ParameterSetName="get",Mandatory=$True,Position=0)]
+        [switch]$Get,
+        
+        # set parameters
+		[Parameter(ParameterSetName="set",Mandatory=$True,Position=0)]
+        [switch]$Set,
 
+        [Parameter(ParameterSetName="set",Mandatory=$True,Position=1)]
+        [string]$Element,
+
+        # all parametersets
 		[Parameter(Mandatory=$True,Position=1)]
 		[string]$XPath
 	)
@@ -32,6 +40,14 @@ function Invoke-PaApiConfig {
     }
 
     PROCESS {
-		$Global:PaDeviceObject.invokeConfigQuery($Action,$Xpath)
+        switch ($PsCmdlet.ParameterSetName) {
+            'get' {
+                $Global:PaDeviceObject.invokeConfigQuery('get',$Xpath)
+            }
+            'set' {
+                $Global:PaDeviceObject.invokeConfigQuery('set',$Xpath,$Element)
+            }
+        }
+		
     }
 }

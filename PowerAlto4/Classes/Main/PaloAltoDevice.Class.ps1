@@ -67,11 +67,13 @@ class PaloAltoDevice {
         # Redact password if it's a keygen query
         if ($queryString.type -ne "keygen") {
             $this.UrlHistory += $url
-            $this.QueryHistory += $queryString
         } else {
             $this.UrlHistory += $url.Replace($queryString.password,"PASSWORDREDACTED")
-            $this.QueryHistory += $queryString.Replace($queryString.password,"PASSWORDREDACTED")
+            $queryString.password = $queryString.password,"PASSWORDREDACTED"
         }
+
+        # add query object to QueryHistory
+        $this.QueryHistory += $queryString
 
         # try query
         try {

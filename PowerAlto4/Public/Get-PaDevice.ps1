@@ -90,25 +90,21 @@ function Get-PaDevice {
     }
 
     PROCESS {
-        
-        if (!($ApiKey)) {
-            Write-Verbose "$VerbosePrefix Attempting to generate API Key."
-			#$global:PaDeviceObject.invokeKeygenQuery($Credential)
-            Write-Verbose "$VerbosePrefix API Key successfully generated."
-		}
 		
 		if ($ApiKey) {
-			Write-Verbose "$VerbosePrefix Attempting to generate API Key."
+			Write-Verbose "$VerbosePrefix API Key supplied"
 			$global:PaDeviceObject = [PaloAltoDevice]::new($DeviceAddress,$ApiKey)
-			Write-Verbose "$VerbosePrefix API Key successfully generated."
 		} else {
-			$global:PaDeviceObject = [PaloAltoDevice]::new($DeviceAddress,$Credential)
+            Write-Verbose "$VerbosePrefix Attempting to generate API Key."
+            $global:PaDeviceObject = [PaloAltoDevice]::new($DeviceAddress,$Credential)
+            Write-Verbose "$VerbosePrefix API Key successfully generated."
 		}
 		
 		# Test API connection
 		# When generating an api key, the connection is already tested.
 		# This grabs serial/version info from the box and tests if you're just
-		# supplying an api key yourself.
+        # supplying an api key yourself.
+        Write-Verbose "$VerbosePrefix Attempting to test connection"
 		$TestConnect = $global:PaDeviceObject.testConnection()
 		if ($TestConnect) {
 			if (!($Quiet)) {

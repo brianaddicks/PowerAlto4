@@ -124,6 +124,15 @@ class PaloAltoDevice {
         $this.ApiKey = $result.response.result.key
         return $result
     }
+    
+    # Commit API Query
+    [xml] invokeCommitQuery([string]$cmd) {
+        $queryString = @{}
+        $queryString.type = "commit"
+        $queryString.cmd = $cmd
+        $result = $this.invokeApiQuery($queryString)
+        return $result
+    }
 
     # Operational API Query
     [xml] invokeOperationalQuery([string]$cmd) {

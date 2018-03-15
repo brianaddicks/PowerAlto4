@@ -51,7 +51,6 @@ function Get-PaCustomReport {
 
         $ReturnObject = @()
         foreach ($entry in $Entries) {
-            $Global:entrytest = $entry
             # Initialize Report object, add to returned array
             $Report        = [PaCustomReport]::new($entry.name)
             $ReturnObject += $Report

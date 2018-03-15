@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-Gets configuration of custom reports from a Palo Alto device.
+Wrapper for -WhatIf output, like Write-Verbose
 
 ## Syntax
 
@@ -13,14 +13,14 @@ Get-PaCustomReport [[-Name] <String>] [[-Vsys] <String>]
 
 ## Description
 
-Gets configuration of custom reports from a Palo Alto device.
+Wrapper for -WhatIf output, like Write-Verbose
 
 ## Examples
 
 ### Example 1
 
 ```
-PS c:\> 
+PS c:\> Write-WhatIf "This is what happens when you do a thing."
 ```
 
 

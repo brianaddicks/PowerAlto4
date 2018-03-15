@@ -1,11 +1,14 @@
 site_name: PowerAlto4 Docs
 theme: readthedocs
 pages:
-  - Home: index.md
   - Cmdlets:
-    - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
-    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
-    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
     - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
-    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
+    - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
     - Get-PaDevice: cmdlets/Get-PaDevice.md
+    - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
+    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
+    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
+    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
+    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
+    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
+  - Home: index.md

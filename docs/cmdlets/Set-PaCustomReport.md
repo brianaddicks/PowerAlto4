@@ -9,13 +9,13 @@ Creates/Configures a custom report on a Palo Alto device.
 ### summary
 
 ```powershell
-Set-PaCustomReport [-Name] <String> [-Vsys <String>] -SummaryDatabase <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> 
+Set-PaCustomReport [-Name] <String> [-Vsys <String>] -SummaryDatabase <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> [-WhatIf] [-Confirm] 
 ```
 
 ### detailed
 
 ```powershell
-Set-PaCustomReport [-Name] <String> [-Vsys <String>] -DetailedLog <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> 
+Set-PaCustomReport [-Name] <String> [-Vsys <String>] -DetailedLog <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> [-WhatIf] [-Confirm] 
 ```
 
 ## Description
@@ -151,6 +151,34 @@ Parameter Sets: All
 Aliases: 
 
 Required: true
+Position: named
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -WhatIf
+
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: wi
+
+Required: false
+Position: named
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Confirm
+
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: cf
+
+Required: false
 Position: named
 Default value: 
 Accept pipeline input: false

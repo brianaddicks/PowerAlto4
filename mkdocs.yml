@@ -3,7 +3,9 @@ theme: readthedocs
 pages:
   - Home: index.md
   - Cmdlets:
-    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
+    - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
     - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
-    - Get-PaDevice: cmdlets/Get-PaDevice.md
     - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
+    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
+    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
+    - Get-PaDevice: cmdlets/Get-PaDevice.md

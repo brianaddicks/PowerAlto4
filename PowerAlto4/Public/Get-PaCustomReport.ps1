@@ -1,18 +1,16 @@
-function Get-PaCustomReport {
+function Write-WhatIf {
 	<#
 	.SYNOPSIS
-		Gets configuration of custom reports from a Palo Alto device.
+		Wrapper for -WhatIf output, like Write-Verbose
 		
 	.DESCRIPTION
-		Gets configuration of custom reports from a Palo Alto device.
+		Wrapper for -WhatIf output, like Write-Verbose
 
-	.EXAMPLE
+    .EXAMPLE
+        Write-WhatIf "This is what happens when you do a thing."
 		
-	.PARAMETER Name
-		
-
-    .PARAMETER Vsys
-		
+	.PARAMETER Message
+		What you want to output when -WhatIf is specified.
 	#>
 	[CmdletBinding()]
 

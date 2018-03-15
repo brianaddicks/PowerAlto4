@@ -14,7 +14,7 @@ function Set-PaCustomReport {
     .PARAMETER Vsys
 		
 	#>
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess=$True)]
 
 	Param (
 		[Parameter(Mandatory=$True,Position=0)]
@@ -78,12 +78,10 @@ function Set-PaCustomReport {
 
         $ElementXml = $ConfigObject.ToXml().reports.entry.InnerXml
 
-        $Set = Invoke-PaApiConfig -Set -Xpath $XPath -Element $ElementXml
+        if ($PSCmdlet.ShouldProcess("Creating new report: $($ConfigObject.Name)")) {
+            $Set = Invoke-PaApiConfig -Set -Xpath $XPath -Element $ElementXml
 
-        $Set
-
-        # Get the config info for the report
-        # This is required for the call to run the report
-        # $ReportConfig = $Global:PaDeviceObject.invokeConfigQuery("set",$XPath,$element)
+            $Set
+        }
     }
 }

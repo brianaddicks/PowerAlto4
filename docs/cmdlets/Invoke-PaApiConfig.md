@@ -6,9 +6,16 @@ Invokes a Palo Alto Config Api.
 
 ## Syntax
 
+### get (Default)
 
 ```powershell
-Invoke-PaApiConfig [-Action] <String> [-XPath] <String> 
+Invoke-PaApiConfig [-Get] [-XPath] <String> 
+```
+
+### set
+
+```powershell
+Invoke-PaApiConfig [-Set] [-Element] <String> [-XPath] <String> 
 ```
 
 ## Description
@@ -37,18 +44,47 @@ Returns interface configuration for the currently connected Palo Alto Device.
 
 ## Parameters
 
-### -Action
+### -Get
 
-Action to use for the Api Config Call (get, set, rename currently supported)
+get parameters
 
 ```asciidoc
-Type: String
-Parameter Sets: All
+Type: SwitchParameter
+Parameter Sets: get
 Aliases: 
 
 Required: true
 Position: 1
-Default value: get
+Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Set
+
+set parameters
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: set
+Aliases: 
+
+Required: true
+Position: 1
+Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Element
+
+
+```asciidoc
+Type: String
+Parameter Sets: set
+Aliases: 
+
+Required: true
+Position: 2
+Default value: 
 Accept pipeline input: false
 Accept wildcard characters: false
 ```

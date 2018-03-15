@@ -19,6 +19,9 @@ class PaloAltoDevice {
     [ValidateSet('http','https')] 
     [string]$Protocol = "https"
 
+    # Context Data
+    [string]$Vsys = 'shared'
+
     # Track usage
     hidden [bool]$Connected
     [array]$UrlHistory
@@ -26,7 +29,29 @@ class PaloAltoDevice {
     [array]$QueryHistory
     $LastError
     $LastResult
-    
+
+    # Create XPath
+    [string] createXPath ([string]$ConfigNode,[string]$Name) {
+        $XPath = '/config'
+
+        # choose correct vsys
+        # this may need to be modified for systems that don't support vsys, PA-200s maybe?
+        if ($this.Vsys -eq 'shared') {
+            $XPath += '/shared'
+        } else {
+            $XPath +="/devices/entry/vsys/entry[@name='$($this.Vsys)']"
+        }
+
+        # Add ConfigNode
+        $XPath += "/$ConfigNode"
+
+        if ($Name) {
+            $XPath += "/entry[@name='$Name']"
+        }
+
+        return $XPath
+    }
+
     # Create query string
     static [string] createQueryString ([hashtable]$hashTable) {
         $i = 0

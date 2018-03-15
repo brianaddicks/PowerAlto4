@@ -45,22 +45,31 @@ function Get-PaCustomReport {
         # Get the config info for the report
         # This is required for the call to run the report
         $ReportConfig = Invoke-PaApiConfig -Get -Xpath $ReportXPath
+        if ($ReportConfig.response.results.reports) {
+            $Entries = $ReportConfig.response.result.reports.entry
+        } else {
+            $Entries = $ReportConfig.response.result.entry
+        }
 
         $ReturnObject = @()
-        foreach ($entry in $ReportConfig.response.result.reports.entry) {
+        foreach ($entry in $Entries) {
+            $Global:entrytest = $entry
             # Initialize Report object, add to returned array
-            $Database      = ($entry.type | Get-Member -Type Property).Name
-            Write-Verbose "$VerbosePrefix adding report: Name $($entry.name), Database $Database"
             $Report        = [PaCustomReport]::new($entry.name)
             $ReturnObject += $Report
+
+            # Get Node Name Properties
+            $Report.Database = [HelperXml]::parseCandidateConfigXml($entry.type,$true)
+            Write-Verbose "$VerbosePrefix adding report: Name $($entry.name), Database $($Report.Database)"
+
+            
             
             # Add other properties to report
-            $Report.Database     = $Database
-            $Report.FirstColumn  = $entry.type.trsum.'aggregate-by'.member
-            $Report.Members      = $entry.type.trsum.values.member
-            $Report.TimeFrame    = $entry.period
-            $Report.EntriesShown = $entry.topn
-            $Report.Groups       = $entry.topm
+            $Report.FirstColumn  = [HelperXml]::parseCandidateConfigXml($entry.type.trsum.'aggregate-by'.member,$false)
+            $Report.Members      = [HelperXml]::parseCandidateConfigXml($entry.type.trsum.values.member,$false)
+            $Report.TimeFrame    = [HelperXml]::parseCandidateConfigXml($entry.period,$false)
+            $Report.EntriesShown = [HelperXml]::parseCandidateConfigXml($entry.topn,$false)
+            $Report.Groups       = [HelperXml]::parseCandidateConfigXml($entry.topm,$false)
         }
 
         $ReturnObject

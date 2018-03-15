@@ -44,7 +44,7 @@ function Get-PaJob {
             $Job.Type         = $result.type
             $Job.Status       = $result.status
             $Job.Result       = $result.result
-            $Job.Warnings     = $result.warnings
+            $Job.Warnings     = $result.warnings -join "`r`n"
             $Job.Details      = $result.details.line -join "`r`n"
             $Job.Description  = $result.description
             $Job.User         = $result.user

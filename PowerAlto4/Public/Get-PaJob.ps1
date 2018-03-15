@@ -30,7 +30,6 @@ function Get-PaJob {
 
         $ReturnObject = @()
         foreach ($result in $Results) {
-            $global:testresult = $result
             $Job = [PaJob]::new($result.id)
             $ReturnObject += $Job
 

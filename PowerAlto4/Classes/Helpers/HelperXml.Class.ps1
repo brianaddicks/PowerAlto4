@@ -23,4 +23,22 @@ class HelperXml {
 
         return $ReturnValue
     }
+
+    static [array] SplitXml ([xml]$Content) {
+        # String Writer and XML Writer objects to write XML to string
+        $StringWriter = New-Object System.IO.StringWriter 
+        $XmlWriter = New-Object System.XMl.XmlTextWriter $StringWriter 
+        
+        # Default = None, change Formatting to Indented
+        $xmlWriter.Formatting = "indented" 
+        
+        # Gets or sets how many IndentChars to write for each level in 
+        # the hierarchy when Formatting is set to Formatting.Indented
+        $Content.WriteContentTo($XmlWriter) 
+        $XmlWriter.Flush()
+        $StringWriter.Flush() 
+        $ReturnObject = $StringWriter.ToString() -split '[\r\n]'
+
+        return $ReturnObject
+    }
 }

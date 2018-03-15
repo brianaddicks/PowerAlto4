@@ -1,4 +1,4 @@
-function Get-PaPendingCommit {
+function Get-PaConfigDiff {
 	<#
 	.SYNOPSIS
 		Checks to see if there's a difference in the candidate and running configuration on a Palo Alto Device.
@@ -7,6 +7,7 @@ function Get-PaPendingCommit {
 		Checks to see if there's a difference in the candidate and running configuration on a Palo Alto Device.
 
     .EXAMPLE
+        Get-PaConfigDiff
 	#>
 	[CmdletBinding()]
 
@@ -19,8 +20,11 @@ function Get-PaPendingCommit {
     }
 
     PROCESS {
-        $ReturnObject = $RunningConfig -eq $CandidateConfig
+        # Format Xml for comparison
+        $RunningConfig   = [HelperXml]::SplitXml($RunningConfig)
+        $CandidateConfig = [HelperXml]::SplitXml($CandidateConfig)
 
-        $ReturnObject
+        Compare-Object $RunningConfig $CandidateConfig
+        # Would like to clean this up a bit and return output that's useful
     }
 }

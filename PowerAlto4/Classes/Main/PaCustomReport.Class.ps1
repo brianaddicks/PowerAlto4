@@ -6,6 +6,7 @@ Enum ShortDatabase {
 
 class PaCustomReport {
     [string]$Name
+    [string]$Description
     [string]$Database
     [string]$FirstColumn
     [string[]]$Members
@@ -65,6 +66,11 @@ class PaCustomReport {
         # Create/Add Groups to Entry
         $GroupsNode = $Doc.CreateNode("element",'topm',$null)
         $GroupsNode.InnerText = $this.Groups
+        $EntryNode.AppendChild($GroupsNode)
+
+        # Create/Add Description to Entry
+        $GroupsNode = $Doc.CreateNode("element",'description',$null)
+        $GroupsNode.InnerText = $this.Description
         $EntryNode.AppendChild($GroupsNode)
 
         # Append Entry to Root and Root to Doc

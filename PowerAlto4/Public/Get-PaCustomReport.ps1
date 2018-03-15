@@ -68,6 +68,7 @@ function Get-PaCustomReport {
             $Report.TimeFrame    = [HelperXml]::parseCandidateConfigXml($entry.period,$false)
             $Report.EntriesShown = [HelperXml]::parseCandidateConfigXml($entry.topn,$false)
             $Report.Groups       = [HelperXml]::parseCandidateConfigXml($entry.topm,$false)
+            $Report.Description  = [HelperXml]::parseCandidateConfigXml($entry.description,$false)
         }
 
         $ReturnObject

@@ -1,4 +1,4 @@
-function Write-WhatIf {
+function Get-PaCustomReport {
 	<#
 	.SYNOPSIS
 		Wrapper for -WhatIf output, like Write-Verbose

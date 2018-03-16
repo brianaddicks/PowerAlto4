@@ -59,7 +59,22 @@ function Get-PaJob {
             
             # Wait 10 seconds and check again
             do {
-                Start-Sleep -Seconds 10
+                if ($ShowProgress) {
+                    $ProgressParams = @{}
+                    $ProgressParams.Activity = "Checking Commit Status..."
+                    $ProgressParams.SecondsRemaining = 10
+                    $ProgressParams.PercentComplete = $Job.Progress
+                    Write-Progress @ProgressParams
+                    for ($i = 1;$i -le 10; $i++) {
+                        Start-Sleep -Seconds 1
+                        $ProgressParams.SecondsRemaining = 10 - $i
+                        Write-Progress @ProgressParams
+                    }
+                    $ProgressParams.CurrentOperation = "Contacting Device..."
+                    Write-Progress @ProgressParams
+                } else {
+                    Start-Sleep -Seconds 10
+                }
                 Write-Verbose "$VerbosePrefix Checking again"
                 $Job = Get-PaJob -JobId $JobId
                 Write-Verbose "$VerbosePrefix Progress: $($Job.Progress)"

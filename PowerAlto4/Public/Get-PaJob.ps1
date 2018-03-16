@@ -10,13 +10,18 @@ function Get-PaJob {
 
 	Param (
         [Parameter(ParameterSetName="alljobs",Mandatory=$False,Position=0)]
-        [Parameter(ParameterSetName="singlejob",Mandatory=$False,Position=0)]
+        [Parameter(ParameterSetName="singlejob",Mandatory=$True,Position=0)]
         [int]$JobId,
+
+        [Parameter(ParameterSetName="latest",Mandatory=$True,Position=0)]
+		[switch]$Latest,
         
         [Parameter(ParameterSetName="singlejob",Mandatory=$False)]
+        [Parameter(ParameterSetName="latest",Mandatory=$False)]
 		[switch]$Wait,
         
         [Parameter(ParameterSetName="singlejob",Mandatory=$False)]
+        [Parameter(ParameterSetName="latest",Mandatory=$False)]
 		[switch]$ShowProgress
 	)
 
@@ -35,6 +40,10 @@ function Get-PaJob {
         $Query = Invoke-PaApiOperation -Cmd $Cmd
         $Results = $Query.response.result.job
 
+        if ($Latest) {
+            $Results = $Results[0]
+        }
+
         $ReturnObject = @()
         foreach ($result in $Results) {
             $Job = [PaJob]::new($result.id)
@@ -45,17 +54,17 @@ function Get-PaJob {
             $Job.Type         = $result.type
             $Job.Status       = $result.status
             $Job.Result       = $result.result
-            $Job.Warnings     = $result.warnings -join "`r`n"
+            $Job.Warnings     = $result.warnings.line -join "`r`n"
             $Job.Details      = $result.details.line -join "`r`n"
             $Job.Description  = $result.description
             $Job.User         = $result.user
             $Job.Progress     = $result.progress
-            if ($Job.Progress -eq 100) {
+            if ($Job.Status -eq 'FIN') {
                 $Job.TimeComplete = Get-Date $result.tfin
             }
         }
 
-        if (($Wait -or $ShowProgress) -and ($Job.Progress -ne 100)) {
+        if (($Wait -or $ShowProgress) -and ($Job.Progress -ne 100) -and ($Job.Status -ne 'FIN')) {
             Write-Verbose "$VerbosePrefix Job not complete"
             
             # Wait 10 seconds and check again
@@ -79,7 +88,7 @@ function Get-PaJob {
                     Start-Sleep -Seconds 10
                 }
                 Write-Verbose "$VerbosePrefix Checking again"
-                $Job = Get-PaJob -JobId $JobId
+                $Job = Get-PaJob -JobId $Job.Id
                 $ProgressParams.PercentComplete = $Job.Progress
                 $ProgressParams.Status = "$($Job.Progress) %"
                 Write-Progress @ProgressParams

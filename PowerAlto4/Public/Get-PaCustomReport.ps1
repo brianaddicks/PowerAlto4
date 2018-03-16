@@ -24,26 +24,14 @@ function Get-PaCustomReport {
 
     BEGIN {
         $VerbosePrefix = "Get-PaCustomReport:"
-        $ReportXPath = '/config'
-        
-        if (!($Vsys)) {
-            $ReportXPath += "/shared"
-        } else {
-            $ReportXPath += "/devices/entry/vsys/entry[@name='$Vsys']"
-        }
-
-        $ReportXPath += '/reports'
-
-        if ($Name) {
-            $ReportXPath += "/entry[@name='$Name']"
-        }
+        $Xpath = $Global:PaDeviceObject.createXPath('reports',$Name)
     }
 
     PROCESS {
         # Get the config info for the report
         # This is required for the call to run the report
-        $ReportConfig = Invoke-PaApiConfig -Get -Xpath $ReportXPath
-        if ($ReportConfig.response.results.reports) {
+        $ReportConfig = Invoke-PaApiConfig -Get -Xpath $XPath
+        if ($ReportConfig.response.result.reports) {
             $Entries = $ReportConfig.response.result.reports.entry
         } else {
             $Entries = $ReportConfig.response.result.entry

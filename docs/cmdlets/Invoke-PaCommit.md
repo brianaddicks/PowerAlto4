@@ -8,7 +8,7 @@ Commits Palo Alto configuration.
 
 
 ```powershell
-Invoke-PaCommit [-WhatIf] [-Confirm] 
+Invoke-PaCommit [-Force] [-Wait] [-ShowProgress] [-WhatIf] [-Confirm] 
 ```
 
 ## Description
@@ -37,6 +37,48 @@ PS c:\>
 
 ## Parameters
 
+### -Force
+
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: false
+Position: named
+Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Wait
+
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: false
+Position: named
+Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -ShowProgress
+
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: false
+Position: named
+Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
 ### -WhatIf
 
 

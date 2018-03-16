@@ -3,13 +3,13 @@ theme: readthedocs
 pages:
   - Home: index.md
   - Cmdlets:
-    - Get-PaDevice: cmdlets/Get-PaDevice.md
-    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
-    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
     - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
+    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
     - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
     - Get-PaJob: cmdlets/Get-PaJob.md
+    - Get-PaDevice: cmdlets/Get-PaDevice.md
     - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
-    - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
     - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
     - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
+    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
+    - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md

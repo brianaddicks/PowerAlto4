@@ -18,7 +18,10 @@ function Set-PaCustomReport {
 
 	Param (
 		[Parameter(Mandatory=$True,Position=0)]
-		[string]$Name,
+        [string]$Name,
+        
+        [Parameter(Mandatory=$False)]
+		[string]$Description,
 
 		[Parameter(Mandatory=$False)]
 		[string]$Vsys,
@@ -43,7 +46,13 @@ function Set-PaCustomReport {
         [int]$Groups = 10,
 
         [Parameter(Mandatory=$True)]
-        [string[]]$Columns
+        [string[]]$Columns,
+
+        [Parameter(Mandatory=$False)]
+        [string]$Query,
+
+        [Parameter(Mandatory=$False)]
+        [string]$SortBy
         
 	)
 
@@ -73,8 +82,10 @@ function Set-PaCustomReport {
         $ConfigObject.TimeFrame    = $TimeFrame
         $ConfigObject.EntriesShown = $EntriesShown
         $ConfigObject.Groups       = $Groups
-        $ConfigObject.FirstColumn  = $Columns[0]
-        $ConfigObject.Members      = $Columns | Where-Object { $_ -ne $Columns[0] }
+        $ConfigObject.Columns      = $Columns
+        $ConfigObject.Description  = $Description
+        $ConfigObject.Query        = $Query
+        $ConfigObject.SortBy       = $SortBy
 
         $ElementXml = $ConfigObject.ToXml().reports.entry.InnerXml
 

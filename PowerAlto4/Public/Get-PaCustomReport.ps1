@@ -44,18 +44,19 @@ function Get-PaCustomReport {
             $ReturnObject += $Report
 
             # Get Node Name Properties
-            $Report.Database = [HelperXml]::parseCandidateConfigXml($entry.type,$true)
+            $ShortDatabaseName = [HelperXml]::parseCandidateConfigXml($entry.type,$true)
+            $Report.Database = $Report.TranslateDatabaseName($ShortDatabaseName,'Friendly')
             Write-Verbose "$VerbosePrefix adding report: Name $($entry.name), Database $($Report.Database)"
 
-            
-            
             # Add other properties to report
-            $Report.FirstColumn  = [HelperXml]::parseCandidateConfigXml($entry.type.trsum.'aggregate-by'.member,$false)
-            $Report.Members      = [HelperXml]::parseCandidateConfigXml($entry.type.trsum.values.member,$false)
+            $Report.Columns      = [HelperXml]::parseCandidateConfigXml($entry.type.$ShortDatabaseName.'aggregate-by'.member,$false)
+            $Report.Columns      += [HelperXml]::parseCandidateConfigXml($entry.type.$ShortDatabaseName.values.member,$false)
+            $Report.SortBy       = [HelperXml]::parseCandidateConfigXml($entry.type.$ShortDatabaseName.sortby,$false)
             $Report.TimeFrame    = [HelperXml]::parseCandidateConfigXml($entry.period,$false)
             $Report.EntriesShown = [HelperXml]::parseCandidateConfigXml($entry.topn,$false)
             $Report.Groups       = [HelperXml]::parseCandidateConfigXml($entry.topm,$false)
             $Report.Description  = [HelperXml]::parseCandidateConfigXml($entry.description,$false)
+            $Report.Query        = [HelperXml]::parseCandidateConfigXml($entry.query,$false)
         }
 
         $ReturnObject

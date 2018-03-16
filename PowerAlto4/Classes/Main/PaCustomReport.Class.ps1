@@ -1,20 +1,43 @@
-######################################## Enums #######################################
-# Short Database Names
-Enum ShortDatabase {
-    trsum = 1
-}
-
 class PaCustomReport {
     [string]$Name
     [string]$Description
     [string]$Database
-    [string]$FirstColumn
-    [string[]]$Members
+    [string]$SortBy
+    [string[]]$Columns
     [string]$TimeFrame
     [int]$EntriesShown
     [int]$Groups
+    [string]$Query
 
     ###################################### Methods #######################################
+    # GetColumnType
+    [string] GetColumnType([string]$Column) {
+        $AggregateColumns  = @()
+        $AggregateColumns += 'src'
+        $AggregateColumns += 'srcuser'
+        $AggregateColumns += 'dst'
+        $AggregateColumns += 'dstuser'
+        $AggregateColumns += 'action'
+        $AggregateColumns += 'threatid'
+        $AggregateColumns += 'quarter-hour-of-receive_time'
+
+
+        $ValueColumns  = @()
+        $ValueColumns += 'count'
+        $ValueColumns += 'bytes'
+        $ValueColumns += 'sessions'
+
+        if ($ValueColumns -contains $Column) {
+            $ColumnType = 'value'
+        } elseif ($AggregateColumns -contains $Column) {
+            $ColumnType = 'aggregate'
+        } else {
+            Throw "PaCustomReport: Unrecognized column: $Column"
+        }
+
+        return $ColumnType
+    }
+
     # invokeReportGetQuery
     [Xml] ToXml() {
         [xml]$Doc = New-Object System.Xml.XmlDocument
@@ -29,23 +52,36 @@ class PaCustomReport {
 
         # Start DatabaseNode
         $DatabaseShortName = $this.TranslateDatabaseName($this.Database,"short")
-        $DatabaseNode = $Doc.CreateNode("element",$DatabaseShortName,$null)
+        $DatabaseNode      = $Doc.CreateNode("element",$DatabaseShortName,$null)
         
-        # aggregate-by propert (FirstColumn)
-        $FirstColumnNode = $Doc.CreateNode("element",'aggregate-by',$null)
-        $FirstColumnMemberNode = $Doc.CreateNode("element",'member',$null)
-        $FirstColumnMemberNode.InnerText = $this.FirstColumn
-        $FirstColumnNode.AppendChild($FirstColumnMemberNode)
-        $DatabaseNode.AppendChild($FirstColumnNode)
+        # Create Aggregate/Member Nodes
+        $AggregateNode = $Doc.CreateNode("element",'aggregate-by',$null)
+        $ValueNode     = $Doc.CreateNode("element",'values',$null)
 
-        # value members
-        $ValuesNode = $Doc.CreateNode("element",'values',$null)
-        foreach ($m in $this.Members) {
+        # Columns
+        foreach ($c in $this.Columns) {
             $MemberNode = $Doc.CreateNode("element",'member',$null)
-            $MemberNode.InnerText = $m
-            $ValuesNode.AppendChild($MemberNode)
+            $MemberNode.InnerText = $c
+            switch ($this.GetColumnType($c)) {
+                'aggregate' {
+                    $AggregateNode.AppendChild($MemberNode)
+                    continue
+                }
+                'value' {
+                    $ValueNode.AppendChild($MemberNode)
+                    continue
+                }
+            }
         }
-        $DatabaseNode.AppendChild($ValuesNode)
+
+        # Create SortBy Node
+        $SortByNode = $Doc.CreateNode("element",'sortby',$null)
+        $SortByNode.InnerText = $this.SortBy
+        $DatabaseNode.AppendChild($SortByNode)
+
+        # Add aggregate/value nodes to database node
+        $DatabaseNode.AppendChild($AggregateNode)
+        $DatabaseNode.AppendChild($ValueNode)
         
         # add Database to type
         $TypeNode.AppendChild($DatabaseNode)
@@ -73,6 +109,11 @@ class PaCustomReport {
         $GroupsNode.InnerText = $this.Description
         $EntryNode.AppendChild($GroupsNode)
 
+        # Create/Add Query to Entry
+        $QueryNode = $Doc.CreateNode("element",'query',$null)
+        $QueryNode.InnerText = $this.Query
+        $EntryNode.AppendChild($QueryNode)
+
         # Append Entry to Root and Root to Doc
         $root.AppendChild($EntryNode)
         $Doc.AppendChild($root)
@@ -84,6 +125,7 @@ class PaCustomReport {
     [string] TranslateDatabaseName([string]$Name,[string]$DesiredType) {
         $DatabaseTranslations = @{}
         $DatabaseTranslations.trsum = "Traffic Summary"
+        $DatabaseTranslations.thsum = "Threat Summary"
 
         $TranslatedName = $null
         if (($DatabaseTranslations.Keys -contains $Name) -and ($DesiredType -eq "Friendly")) {

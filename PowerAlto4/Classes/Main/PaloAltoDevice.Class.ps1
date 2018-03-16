@@ -102,7 +102,7 @@ class PaloAltoDevice {
 
         # try query
         try {
-            $rawResult = Invoke-WebRequest -Uri $url -SkipCertificateCheck
+            $rawResult = Invoke-WebRequest -Uri $url -SkipCertificateCheck -UseBasicParsing
         } catch {
             Throw "$($error[0].ToString()) $($error[0].InvocationInfo.PositionMessage)"
         }
@@ -110,6 +110,29 @@ class PaloAltoDevice {
         $result                      = [xml]($rawResult.Content)
         $this.RawQueryResultHistory += $rawResult
         $this.LastResult             = $result
+
+        $proccessedResult = $this.processQueryResult($result)
+        
+        return $proccessedResult
+    }
+
+    # processQueryResult
+    [xml] processQueryResult ([xml]$unprocessedResult) {
+        $result = $null
+
+        switch ($unprocessedResult.response.status) {
+            'success' {
+                $result = $unprocessedResult
+            }
+            'error' {
+                if ($unprocessedResult.response.msg.line) {
+                    $Message = $unprocessedResult.response.msg.line.'#cdata-section' -join "`r`n"
+                } else {
+                    $Message = $unprocessedResult.response.msg
+                }
+                Throw $Message
+            }
+        }
 
         return $result
     }

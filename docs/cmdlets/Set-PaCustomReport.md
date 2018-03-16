@@ -9,13 +9,13 @@ Creates/Configures a custom report on a Palo Alto device.
 ### summary
 
 ```powershell
-Set-PaCustomReport [-Name] <String> [-Vsys <String>] -SummaryDatabase <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> [-WhatIf] [-Confirm] 
+Set-PaCustomReport [-Name] <String> [-Description <String>] [-Vsys <String>] -SummaryDatabase <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> [-Query <String>] [-SortBy <String>] [-WhatIf] [-Confirm] 
 ```
 
 ### detailed
 
 ```powershell
-Set-PaCustomReport [-Name] <String> [-Vsys <String>] -DetailedLog <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> [-WhatIf] [-Confirm] 
+Set-PaCustomReport [-Name] <String> [-Description <String>] [-Vsys <String>] -DetailedLog <String> -TimeFrame <String> [-EntriesShown <Int32>] [-Groups <Int32>] -Columns <String[]> [-Query <String>] [-SortBy <String>] [-WhatIf] [-Confirm] 
 ```
 
 ## Description
@@ -54,6 +54,20 @@ Aliases:
 
 Required: true
 Position: 1
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Description
+
+
+```asciidoc
+Type: String
+Parameter Sets: All
+Aliases: 
+
+Required: false
+Position: named
 Default value: 
 Accept pipeline input: false
 Accept wildcard characters: false
@@ -151,6 +165,34 @@ Parameter Sets: All
 Aliases: 
 
 Required: true
+Position: named
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Query
+
+
+```asciidoc
+Type: String
+Parameter Sets: All
+Aliases: 
+
+Required: false
+Position: named
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -SortBy
+
+
+```asciidoc
+Type: String
+Parameter Sets: All
+Aliases: 
+
+Required: false
 Position: named
 Default value: 
 Accept pipeline input: false

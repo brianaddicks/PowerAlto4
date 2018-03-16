@@ -9,13 +9,14 @@ function Get-PaJob {
 	[CmdletBinding(SupportsShouldProcess = $True)]
 
 	Param (
-        [Parameter(Mandatory=$False,Position=0)]
+        [Parameter(ParameterSetName="alljobs",Mandatory=$False,Position=0)]
+        [Parameter(ParameterSetName="singlejob",Mandatory=$False,Position=0)]
         [int]$JobId,
         
-        [Parameter(Mandatory=$False)]
+        [Parameter(ParameterSetName="singlejob",Mandatory=$False)]
 		[switch]$Wait,
         
-        [Parameter(Mandatory=$False)]
+        [Parameter(ParameterSetName="singlejob",Mandatory=$False)]
 		[switch]$ShowProgress
 	)
 
@@ -62,8 +63,10 @@ function Get-PaJob {
                 if ($ShowProgress) {
                     $ProgressParams = @{}
                     $ProgressParams.Activity = "Checking Commit Status..."
+                    $ProgressParams.CurrentOperation = "Waiting to Contact Device..."
                     $ProgressParams.SecondsRemaining = 10
                     $ProgressParams.PercentComplete = $Job.Progress
+                    $ProgressParams.Status = "$($Job.Progress) %"
                     Write-Progress @ProgressParams
                     for ($i = 1;$i -le 10; $i++) {
                         Start-Sleep -Seconds 1
@@ -77,10 +80,14 @@ function Get-PaJob {
                 }
                 Write-Verbose "$VerbosePrefix Checking again"
                 $Job = Get-PaJob -JobId $JobId
+                $ProgressParams.PercentComplete = $Job.Progress
+                $ProgressParams.Status = "$($Job.Progress) %"
+                Write-Progress @ProgressParams
                 Write-Verbose "$VerbosePrefix Progress: $($Job.Progress)"
 
-            } while ($Job.Progress -ne 100)
+            } while ($Job.Status -ne 'FIN')
 
+            $ReturnObject = $Job
         }
 
         $ReturnObject

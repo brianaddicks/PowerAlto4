@@ -27,6 +27,7 @@ class PaloAltoDevice {
 
     # Track usage
     hidden [bool]$Connected
+    hidden [string]$ConfigNode
     [array]$UrlHistory
     [array]$RawQueryResultHistory
     [array]$QueryHistory
@@ -36,6 +37,7 @@ class PaloAltoDevice {
     # Create XPath
     [string] createXPath ([string]$ConfigNode,[string]$Name) {
         $XPath = '/config'
+        $this.ConfigNode = $ConfigNode
 
         # choose correct vsys
         # this may need to be modified for systems that don't support vsys, PA-200s maybe?
@@ -133,9 +135,16 @@ class PaloAltoDevice {
             }
             'error' {
                 if ($unprocessedResult.response.msg.line) {
-                    $Message = $unprocessedResult.response.msg.line.'#cdata-section' -join "`r`n"
+                    if ($unprocessedResult.response.msg.line.'#cdata-section') {
+                        $Message = $unprocessedResult.response.msg.line.'#cdata-section' -join "`r`n"
+                        Write-Verbose "line and #cdata-section detected: $Message"
+                    } else {
+                        $Message = $unprocessedResult.response.msg.line -join "`r`n"
+                        Write-Verbose "line detected: $Message"
+                    }
                 } else {
                     $Message = $unprocessedResult.response.msg
+                    Write-Verbose "line not detected: $Message"
                 }
                 Throw $Message
             }

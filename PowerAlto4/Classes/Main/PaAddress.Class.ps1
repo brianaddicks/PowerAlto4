@@ -16,7 +16,7 @@ class PaAddress {
         $EntryNode.SetAttribute("name",$this.Name)
 
         # Start Type Node with Value
-        $TypeNode = $Doc.CreateNode("element","type",$null)
+        $TypeNode = $Doc.CreateNode("element",$this.Type,$null)
         $TypeNode.InnerText = $this.Value
         $EntryNode.AppendChild($TypeNode)
 
@@ -41,7 +41,7 @@ class PaAddress {
         # Append Entry to Root and Root to Doc
         $root.AppendChild($EntryNode)
         $Doc.AppendChild($root)
-        #>
+
         return $Doc
     }
 

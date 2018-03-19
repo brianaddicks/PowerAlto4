@@ -26,8 +26,6 @@ function New-PaTag {
 	)
 
     BEGIN {
-        $ConfigNode = 'tag'
-        $Xpath = $Global:PaDeviceObject.createXPath($ConfigNode,$Name)
     }
 
     PROCESS {

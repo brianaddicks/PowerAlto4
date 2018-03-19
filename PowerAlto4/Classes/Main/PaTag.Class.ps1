@@ -17,7 +17,7 @@ class PaTag {
 
         # color
         $PropertyNode = $Doc.CreateNode("element",'color',$null)
-        $PropertyNode.InnerText = [PaTag]::($this.Color,'Unfriendly')
+        $PropertyNode.InnerText = $this.GetColorName($this.Color,'Unfriendly')
         $EntryNode.AppendChild($PropertyNode)
 
         # comments
@@ -34,7 +34,7 @@ class PaTag {
 
     ##########################
     # GetColorName
-    static [string]GetColorName([string]$Color,[string]$ReturnedType) {
+    [string] GetColorName([string]$Color,[string]$ReturnedType) {
         $Mapping         = @{}
         $Mapping.color1  = 'Red'
         $Mapping.color2  = 'Green'
@@ -59,20 +59,34 @@ class PaTag {
         $UnfriendlyName = $null
         Write-Verbose "color: $Color"
 
-        if (($Color -match "color\d{1,2}") -and ($Mapping.Keys -contains $Color)) {
-            $FriendlyName =  $Mapping.$Color
-        } elseif ($Mapping.GetEnumerator() | Where-Object { $_.Value -eq $Color}) {
-            $UnfriendlyName = ($Mapping.GetEnumerator() | Where-Object { $_.Value -eq $Color}).Name
-        } else {
-            Throw "Invalid color specified: $Color"
-        }
-
         switch ($ReturnedType) {
             'Friendly' {
+                if (($Color -match "color\d{1,2}") -and ($Mapping.Keys -contains $Color)) {
+                    $FriendlyName =  $Mapping.$Color
+                    Write-Verbose "color friendly name: $FriendlyName"
+                } elseif ($Mapping.GetEnumerator() | Where-Object { $_.Value -eq $Color}) {
+                    $FriendlyName = $Color
+                } else {
+                    Throw "Invalid color specified: $Color"
+                }
                 $ReturnedName = $FriendlyName
+                Write-Verbose "ReturnedType: $ReturnedType`: $FriendlyName"
             }
-            'UnFriendly' {
+            'Unfriendly' {
+                if (($Color -match "color\d{1,2}") -and ($Mapping.Keys -contains $Color)) {
+                    $UnfriendlyName = $Color
+                    Write-Verbose "color friendly name: $FriendlyName"
+                } elseif ($Mapping.GetEnumerator() | Where-Object { $_.Value -eq $Color}) {
+                    $UnfriendlyName = ($Mapping.GetEnumerator() | Where-Object { $_.Value -eq $Color}).Name
+                    Write-Verbose "color unfriendly name: $UnfriendlyName"
+                } else {
+                    Throw "Invalid color specified: $Color"
+                }
                 $ReturnedName = $UnfriendlyName
+                Write-Verbose "ReturnedType: $ReturnedType`: $UnfriendlyName"
+            }
+            default {
+                Throw "Unrecognized ReturnedType: $ReturnedType"
             }
         }
 
@@ -89,6 +103,6 @@ class PaTag {
     # Initiator with color
     PaTag([string]$Name,[string]$Color) {
         $this.Name  = $Name
-        $this.Color = [PaTag]::GetColorName($Color,"Friendly")
+        $this.Color = $this.GetColorName($Color,"Friendly")
     }
 }

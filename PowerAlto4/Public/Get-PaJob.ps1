@@ -6,7 +6,7 @@ function Get-PaJob {
 	.DESCRIPTION
 		Gets job status from Palo Alto Device.
 	#>
-	[CmdletBinding(SupportsShouldProcess = $True)]
+	[CmdletBinding()]
 
 	Param (
         [Parameter(ParameterSetName="alljobs",Mandatory=$False,Position=0)]

@@ -30,11 +30,11 @@ function Get-PaAddress {
     PROCESS {
         # Get the config info for the report
         # This is required for the call to run the report
-        $ReportConfig = Invoke-PaApiConfig -Get -Xpath $XPath
-        if ($ReportConfig.response.result.$XPathNode) {
-            $Entries = $ReportConfig.response.result.$XPathNode.entry
+        $Response = Invoke-PaApiConfig -Get -Xpath $XPath
+        if ($Response.response.result.$XPathNode) {
+            $Entries = $Response.response.result.$XPathNode.entry
         } else {
-            $Entries = $ReportConfig.response.result.entry
+            $Entries = $Response.response.result.entry
         }
 
         $ReturnObject = @()

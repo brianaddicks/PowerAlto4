@@ -13,6 +13,9 @@ class PaloAltoDevice {
     [string]$WildFireVersion
     [string]$UrlVersion
 
+    # Settings
+    [bool]$VsysEnabled
+
     [ValidateRange(1,65535)]
     [int]$Port = 443
 
@@ -36,10 +39,14 @@ class PaloAltoDevice {
 
         # choose correct vsys
         # this may need to be modified for systems that don't support vsys, PA-200s maybe?
-        if ($this.Vsys -eq 'shared') {
-            $XPath += '/shared'
+        if ($this.VsysEnabled) {
+            if ($this.Vsys -eq 'shared') {
+                $XPath += '/shared'
+            } else {
+                $XPath +="/devices/entry/vsys/entry[@name='$($this.Vsys)']"
+            }
         } else {
-            $XPath +="/devices/entry/vsys/entry[@name='$($this.Vsys)']"
+            $XPath +="/devices/entry/vsys/entry[@name='vsys1']"
         }
 
         # Add ConfigNode
@@ -228,6 +235,11 @@ class PaloAltoDevice {
         $this.ThreatVersion   = $result.response.result.system.'threat-version'
         $this.WildFireVersion = $result.response.result.system.'wildfire-version'
         $this.UrlVersion      = $result.response.result.system.'url-filtering-version'
+        if ($result.response.result.system.'multi-vsys' -eq 'on') {
+            $this.VsysEnabled = $true
+        } else {
+            $this.VsysEnabled = $false
+        }
         return $true
     }
 

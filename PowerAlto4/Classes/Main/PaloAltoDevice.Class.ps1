@@ -23,7 +23,7 @@ class PaloAltoDevice {
     [string]$Protocol = "https"
 
     # Context Data
-    [string]$Vsys = 'shared'
+    [string]$TargetVsys = 'shared'
 
     # Track usage
     hidden [bool]$Connected
@@ -42,10 +42,10 @@ class PaloAltoDevice {
         # choose correct vsys
         # this may need to be modified for systems that don't support vsys, PA-200s maybe?
         if ($this.VsysEnabled) {
-            if ($this.Vsys -eq 'shared') {
+            if ($this.TargetVsys -eq 'shared') {
                 $XPath += '/shared'
             } else {
-                $XPath +="/devices/entry/vsys/entry[@name='$($this.Vsys)']"
+                $XPath +="/devices/entry/vsys/entry[@name='$($this.TargetVsys)']"
             }
         } else {
             $XPath +="/devices/entry/vsys/entry[@name='vsys1']"

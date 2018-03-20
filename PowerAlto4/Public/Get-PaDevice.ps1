@@ -66,7 +66,10 @@ function Get-PaDevice {
 
         [Parameter(Mandatory=$False)]
 		[alias('q')]
-		[switch]$Quiet
+        [switch]$Quiet,
+        
+        [Parameter(Mandatory=$False)]
+		[string]$Vsys
 	)
 
     BEGIN {
@@ -105,8 +108,11 @@ function Get-PaDevice {
 		# This grabs serial/version info from the box and tests if you're just
         # supplying an api key yourself.
         Write-Verbose "$VerbosePrefix Attempting to test connection"
-		$TestConnect = $global:PaDeviceObject.testConnection()
+        $TestConnect = $global:PaDeviceObject.testConnection()
 		if ($TestConnect) {
+            if ($Vsys) {
+                $global:PaDeviceObject.Vsys = $Vsys
+            }
 			if (!($Quiet)) {
 				return $global:PaDeviceObject
 			}

@@ -9,13 +9,13 @@ Establishes initial connection to Palo Alto API.
 ### ApiKey (Default)
 
 ```powershell
-Get-PaDevice [-DeviceAddress] <String> [-ApiKey] <String> [[-Port] <Int32>] [-HttpOnly] [-SkipCertificateCheck] [-Quiet] 
+Get-PaDevice [-DeviceAddress] <String> [-ApiKey] <String> [[-Port] <Int32>] [-HttpOnly] [-SkipCertificateCheck] [-Quiet] [-Vsys <String>] 
 ```
 
 ### Credential
 
 ```powershell
-Get-PaDevice [-DeviceAddress] <String> [-Credential] <PSCredential> [[-Port] <Int32>] [-HttpOnly] [-SkipCertificateCheck] [-Quiet] 
+Get-PaDevice [-DeviceAddress] <String> [-Credential] <PSCredential> [[-Port] <Int32>] [-HttpOnly] [-SkipCertificateCheck] [-Quiet] [-Vsys <String>] 
 ```
 
 ## Description
@@ -167,6 +167,20 @@ Aliases: q
 Required: false
 Position: named
 Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Vsys
+
+
+```asciidoc
+Type: String
+Parameter Sets: All
+Aliases: 
+
+Required: false
+Position: named
+Default value: 
 Accept pipeline input: false
 Accept wildcard characters: false
 ```

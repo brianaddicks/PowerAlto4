@@ -1,20 +1,22 @@
 site_name: PowerAlto4 Docs
 theme: readthedocs
 pages:
-  - Home: index.md
   - Cmdlets:
-    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
-    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
-    - Set-PaAddress: cmdlets/Set-PaAddress.md
-    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
-    - Get-PaJob: cmdlets/Get-PaJob.md
-    - Get-PaAddress: cmdlets/Get-PaAddress.md
-    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
-    - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
-    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
     - New-PaTag: cmdlets/New-PaTag.md
-    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
-    - Set-PaTag: cmdlets/Set-PaTag.md
+    - Get-PaJob: cmdlets/Get-PaJob.md
+    - Set-PaAddress: cmdlets/Set-PaAddress.md
+    - Get-PaAddress: cmdlets/Get-PaAddress.md
+    - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
+    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
     - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
+    - Set-PaTargetVsys: cmdlets/Set-PaTargetVsys.md
+    - Get-PaNatPolicy: cmdlets/Get-PaNatPolicy.md
+    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
     - Get-PaDevice: cmdlets/Get-PaDevice.md
+    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
+    - Set-PaTag: cmdlets/Set-PaTag.md
     - Get-PaTag: cmdlets/Get-PaTag.md
+    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
+    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
+    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
+  - Home: index.md

@@ -19,10 +19,10 @@ function Get-PaNatPolicy {
         [Parameter(ParameterSetName="postrulebase",Mandatory=$False,Position=0)]
         [string]$Name,
         
-        [Parameter(ParameterSetName="prerulebase",Mandatory=$False)]
+        [Parameter(ParameterSetName="prerulebase",Mandatory=$True)]
 		[switch]$PreRulebase,
         
-        [Parameter(ParameterSetName="postrulebase",Mandatory=$False)]
+        [Parameter(ParameterSetName="postrulebase",Mandatory=$True)]
 		[switch]$PostRulebase
 	)
 

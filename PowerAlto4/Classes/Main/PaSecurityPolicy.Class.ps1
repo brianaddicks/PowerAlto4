@@ -7,23 +7,23 @@ class PaSecurityPolicy {
     [string[]]$Tags
 
     # Source
-    [string]$SourceZone
-    [string]$SourceAddress = 'any'
+    [string[]]$SourceZone
+    [string[]]$SourceAddress = 'any'
 
     # User
-    [string]$SourceUser = 'any'
-    [string]$HipProfile = 'any'
+    [string[]]$SourceUser = 'any'
+    [string[]]$HipProfile = 'any'
 
     # Destination
-    [string]$DestinationZone
-    [string]$DestinationAddress = 'any'
+    [string[]]$DestinationZone
+    [string[]]$DestinationAddress = 'any'
 
     # Application
-    [string]$Application = 'any'
+    [string[]]$Application = 'any'
 
     # Service/Url Category
-    [string]$Service = 'application-default'
-    [string]$UrlCategory = 'any'
+    [string[]]$Service = 'application-default'
+    [string[]]$UrlCategory = 'any'
 
     # Actions
     ## Action Setting

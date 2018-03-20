@@ -93,52 +93,58 @@ function Get-PaSecurityPolicy {
             # Actions
             ## Action Setting
             $Object.Action              = [HelperXml]::parseCandidateConfigXml($entry.action,$false)
-            $Object.SendIcmpUnreachable = [HelperXml]::parseCandidateConfigXml($entry.'icmp-unreachable',$false)
+            $SendIcmpUnreachable        = [HelperXml]::parseCandidateConfigXml($entry.'icmp-unreachable',$false)
+            $Object.SendIcmpUnreachable = [HelperApi]::TranslateBool($SendIcmpUnreachable,$Object.SendIcmpUnreachable)
             
             ## Profile Setting
             $Object.ProfileType = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting',$true)
             switch ($Object.ProfileType) {
                 'group' {
-                    $Object.GroupProfile = [HelperXml]::parseCandidateConfigXml($entry.group.member,$false)
+                    $Object.GroupProfile = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.group.member,$false)
                 }
                 'profiles' {
-                    $Object.Antivirus               = [HelperXml]::parseCandidateConfigXml($entry.virus.member,$false)
-                    $Object.VulnerabilityProtection = [HelperXml]::parseCandidateConfigXml($entry.vulnerability.member,$false)
-                    $Object.AntiSpyware             = [HelperXml]::parseCandidateConfigXml($entry.spyware.member,$false)
-                    $Object.UrlFiltering            = [HelperXml]::parseCandidateConfigXml($entry.'url-filtering'.member,$false)
-                    $Object.FileBlocking            = [HelperXml]::parseCandidateConfigXml($entry.'file-blocking'.member,$false)
-                    $Object.DataFiltering           = [HelperXml]::parseCandidateConfigXml($entry.'data-filtering'.member,$false)
-                    $Object.WildFireAnalysis        = [HelperXml]::parseCandidateConfigXml($entry.'wildfire-analysis'.member,$false)
+                    $Object.Antivirus               = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.virus.member,$false)
+                    $Object.VulnerabilityProtection = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.vulnerability.member,$false)
+                    $Object.AntiSpyware             = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.spyware.member,$false)
+                    $Object.UrlFiltering            = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'url-filtering'.member,$false)
+                    $Object.FileBlocking            = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'file-blocking'.member,$false)
+                    $Object.DataFiltering           = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'data-filtering'.member,$false)
+                    $Object.WildFireAnalysis        = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'wildfire-analysis'.member,$false)
                 }
             }
 
             ## Log Setting
-            $Object.LogAtSessionStart = [HelperXml]::parseCandidateConfigXml($entry.'log-start',$false)
+            $LogStart                 = [HelperXml]::parseCandidateConfigXml($entry.'log-start',$false)
+            $Object.LogAtSessionStart = [HelperApi]::TranslateBool($LogStart,$Object.LogAtSessionStart)
+
             $Object.LogForwarding     = [HelperXml]::parseCandidateConfigXml($entry.'log-setting',$false)
 
             $LogEnd = [HelperXml]::parseCandidateConfigXml($entry.'log-end',$false)
             if ($LogEnd) {
-                $Object.LogAtSessionEnd = $LogEnd
+                $Object.LogAtSessionEnd = [HelperApi]::TranslateBool($LogEnd,$Object.LogAtSessionEnd)
             }
 
             ## Other Settings
             $Object.Schedule = [HelperXml]::parseCandidateConfigXml($entry.schedule,$false)
-            $Object.Dsri     = [HelperXml]::parseCandidateConfigXml($entry.option.'disable-server-response-inspection',$false)
+            
+            $Dsri = [HelperXml]::parseCandidateConfigXml($entry.option.'disable-server-response-inspection',$false)
+            $Object.Dsri = [HelperApi]::TranslateBool($Dsri,$Object.Dsri)
 
-            $QosFollowC2S    = [HelperXml]::parseCandidateConfigXml($entry.marking.'follow-c2s-flow',$true)
-            $QosIpPrecedence = [HelperXml]::parseCandidateConfigXml($entry.marking.'ip-precedence',$false)
-            $QosIpDscp       = [HelperXml]::parseCandidateConfigXml($entry.marking.'ip-dscp',$false)
+            $QosMarkingType  = [HelperXml]::parseCandidateConfigXml($entry.qos.marking,$true)
 
-            if ($QosFollowC2S) {
-                $Object.QosType    = 'FollowC2S'
-            } elseif ($QosIpPrecedence) {
-                $Object.QosType    = 'IpPrecedence'
-                $Object.QosMarking = [HelperXml]::parseCandidateConfigXml($entry.marking.'ip-precedence',$false)
-            } elseif ($QosIpDscp) {
-                $Object.QosType    = 'IpDscp'
-                $Object.QosMarking = [HelperXml]::parseCandidateConfigXml($entry.marking.'ip-dscp',$false)
+            switch ($QosMarkingType) {
+                'follow-c2s-flow' {
+                    $Object.QosType    = 'FollowC2S'
+                }
+                'ip-precedence' {
+                    $Object.QosType    = 'IpPrecedence'
+                    $Object.QosMarking = [HelperXml]::parseCandidateConfigXml($entry.qos.marking.'ip-precedence',$false)
+                }
+                'ip-dscp' {
+                    $Object.QosType    = 'IpDscp'
+                    $Object.QosMarking = [HelperXml]::parseCandidateConfigXml($entry.qos.marking.'ip-dscp',$false)
+                }
             }
-
         }
 
         if ($Name) {

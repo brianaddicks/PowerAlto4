@@ -14,13 +14,34 @@ function Get-PaNatPolicy {
 	[CmdletBinding()]
 
 	Param (
-		[Parameter(Mandatory=$False,Position=0)]
-		[string]$Name
+        [Parameter(ParameterSetName="rulebase",Mandatory=$False,Position=0)]
+        [Parameter(ParameterSetName="prerulebase",Mandatory=$False,Position=0)]
+        [Parameter(ParameterSetName="postrulebase",Mandatory=$False,Position=0)]
+        [string]$Name,
+        
+        [Parameter(ParameterSetName="prerulebase",Mandatory=$False)]
+		[switch]$PreRulebase,
+        
+        [Parameter(ParameterSetName="postrulebase",Mandatory=$False)]
+		[switch]$PostRulebase
 	)
 
     BEGIN {
-        $VerbosePrefix = "Get-PaNat:"
-        $XPathNode = 'rulebase/nat/rules'
+        $VerbosePrefix = "Get-PaNatPolicy:"
+        
+        # get the right xpath (panorama vs regular)
+        switch ($PsCmdlet.ParameterSetName) {
+            'postrulebase' {
+                $XPathNode = 'post-rulebase/nat/rules'
+            }
+            'prerulebase' {
+                $XPathNode = 'pre-rulebase/nat/rules'
+            }
+            'rulebase' {
+                $XPathNode = 'rulebase/nat/rules'
+            }
+        }
+
         $ResponseNode = 'rules'
         $Xpath = $Global:PaDeviceObject.createXPath($XPathNode,$Name)
     }

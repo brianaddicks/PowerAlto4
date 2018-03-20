@@ -24,6 +24,7 @@ class PaloAltoDevice {
 
     # Context Data
     [string]$TargetVsys = 'shared'
+    [string]$TargetDeviceGroup
 
     # Track usage
     hidden [bool]$Connected
@@ -39,16 +40,23 @@ class PaloAltoDevice {
         $XPath = '/config'
         $this.ConfigNode = $ConfigNode
 
-        # choose correct vsys
-        # this may need to be modified for systems that don't support vsys, PA-200s maybe?
-        if ($this.VsysEnabled) {
-            if ($this.TargetVsys -eq 'shared') {
-                $XPath += '/shared'
+        # choose correct vsys/device-group
+        if ($this.Model -eq "Panorama") {
+            if ($this.TargetDeviceGroup) {
+                $XPath += "/devices/entry[@name='localhost.localdomain']/device-group/entry[@name='$($this.TargetDeviceGroup)']"
             } else {
-                $XPath +="/devices/entry/vsys/entry[@name='$($this.TargetVsys)']"
+                $XPath += '/shared'
             }
         } else {
-            $XPath +="/devices/entry/vsys/entry[@name='vsys1']"
+            if ($this.VsysEnabled) {
+                if ($this.TargetVsys -eq 'shared') {
+                    $XPath += '/shared'
+                } else {
+                    $XPath +="/devices/entry/vsys/entry[@name='$($this.TargetVsys)']"
+                }
+            } else {
+                $XPath +="/devices/entry/vsys/entry[@name='vsys1']"
+            }
         }
 
         # Add ConfigNode

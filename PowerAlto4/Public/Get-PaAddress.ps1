@@ -15,10 +15,7 @@ function Get-PaAddress {
 
 	Param (
 		[Parameter(Mandatory=$False,Position=0)]
-		[string]$Name,
-
-		[Parameter(Mandatory=$False,Position=1)]
-		[string]$Vsys
+		[string]$Name
 	)
 
     BEGIN {

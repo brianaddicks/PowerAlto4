@@ -24,6 +24,14 @@ class HelperXml {
         return $ReturnValue
     }
 
+    static [string[]] GetMembersFromXml ($XmlNode) {
+        $ReturnValue = @()
+        foreach ($member in $XmlNode.Member) {
+            $ReturnValue += [HelperXml]::parseCandidateConfigXml($member,$false)
+        }
+        return $ReturnValue
+    }
+
     static [array] SplitXml ([xml]$Content) {
         # String Writer and XML Writer objects to write XML to string
         $StringWriter = New-Object System.IO.StringWriter 
@@ -40,5 +48,24 @@ class HelperXml {
         $ReturnObject = $StringWriter.ToString() -split '[\r\n]'
 
         return $ReturnObject
+    }
+
+    static [System.Xml.XmlLinkedNode] GetXmlNodeWithMembers ([string]$Node,[string[]]$Members) {
+        [xml]$Doc = New-Object System.Xml.XmlDocument
+        $MembersNode = $Doc.CreateNode("element",$Node,$null)
+        foreach ($member in $Members) {
+            $MemberNode = $Doc.CreateNode("element",'member',$null)
+            $MemberNode.InnerText = $member
+            $MembersNode.AppendChild($MemberNode)
+        }
+
+        return $MembersNode
+    }
+
+    static [System.Xml.XmlLinkedNode] AddNodeWithMembers ([System.Xml.XmlLinkedNode]$ParentNode,[string]$ChildNode,[string[]]$Members) {
+        $MembersNode = [HelperXml]::GetXmlNodeWithMembers($ChildNode,$Members)
+        $ImportNode = $ParentNode.OwnerDocument.ImportNode($MembersNode,$true)
+        $ParentNode.AppendChild($ImportNode)
+        return $ParentNode
     }
 }

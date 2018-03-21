@@ -69,66 +69,66 @@ function Get-PaSecurityPolicy {
             $Object.Number      = $i
             $Object.RuleType    = [HelperXml]::parseCandidateConfigXml($entry.'rule-type',$false)
             $Object.Description = [HelperXml]::parseCandidateConfigXml($entry.description,$false)
-            $Object.Tags        = [HelperXml]::parseCandidateConfigXml($entry.tag.member,$false)
+            $Object.Tags        = [HelperXml]::GetMembersFromXml($entry.tag)
 
             # Source
-            $Object.SourceZone    = [HelperXml]::parseCandidateConfigXml($entry.from.member,$false)
-            $Object.SourceAddress = [HelperXml]::parseCandidateConfigXml($entry.source.member,$false)
+            $Object.SourceZone    = [HelperXml]::GetMembersFromXml($entry.from)
+            $Object.SourceAddress = [HelperXml]::GetMembersFromXml($entry.source)
 
             # User
-            $Object.SourceUser = [HelperXml]::parseCandidateConfigXml($entry.'source-user'.member,$false)
-            $Object.HipProfile = [HelperXml]::parseCandidateConfigXml($entry.'hip-profiles'.member,$false)
+            $Object.SourceUser = [HelperXml]::GetMembersFromXml($entry.'source-user')
+            $Object.HipProfile = [HelperXml]::GetMembersFromXml($entry.'hip-profiles')
 
             # Destination
-            $Object.DestinationZone    = [HelperXml]::parseCandidateConfigXml($entry.to.member,$false)
-            $Object.DestinationAddress = [HelperXml]::parseCandidateConfigXml($entry.destination.member,$false)
+            $Object.DestinationZone    = [HelperXml]::GetMembersFromXml($entry.to)
+            $Object.DestinationAddress = [HelperXml]::GetMembersFromXml($entry.destination)
 
             # Application
-            $Object.Application = [HelperXml]::parseCandidateConfigXml($entry.application.member,$false)
+            $Object.Application = [HelperXml]::GetMembersFromXml($entry.application)
 
             # Service/Url Category
-            $Object.Service = [HelperXml]::parseCandidateConfigXml($entry.service.member,$false)
-            $Object.UrlCategory = [HelperXml]::parseCandidateConfigXml($entry.category.member,$false)
+            $Object.Service = [HelperXml]::GetMembersFromXml($entry.service)
+            $Object.UrlCategory = [HelperXml]::GetMembersFromXml($entry.category)
 
             # Actions
             ## Action Setting
             $Object.Action              = [HelperXml]::parseCandidateConfigXml($entry.action,$false)
             $SendIcmpUnreachable        = [HelperXml]::parseCandidateConfigXml($entry.'icmp-unreachable',$false)
-            $Object.SendIcmpUnreachable = [HelperApi]::TranslateBool($SendIcmpUnreachable,$Object.SendIcmpUnreachable)
+            $Object.SendIcmpUnreachable = [HelperApi]::TranslatePaToBool($SendIcmpUnreachable,$Object.SendIcmpUnreachable)
             
             ## Profile Setting
             $Object.ProfileType = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting',$true)
             switch ($Object.ProfileType) {
                 'group' {
-                    $Object.GroupProfile = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.group.member,$false)
+                    $Object.GroupProfile = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.group)
                 }
                 'profiles' {
-                    $Object.Antivirus               = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.virus.member,$false)
-                    $Object.VulnerabilityProtection = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.vulnerability.member,$false)
-                    $Object.AntiSpyware             = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.spyware.member,$false)
-                    $Object.UrlFiltering            = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'url-filtering'.member,$false)
-                    $Object.FileBlocking            = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'file-blocking'.member,$false)
-                    $Object.DataFiltering           = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'data-filtering'.member,$false)
-                    $Object.WildFireAnalysis        = [HelperXml]::parseCandidateConfigXml($entry.'profile-setting'.profiles.'wildfire-analysis'.member,$false)
+                    $Object.Antivirus               = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.profiles.virus)
+                    $Object.VulnerabilityProtection = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.profiles.vulnerability)
+                    $Object.AntiSpyware             = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.profiles.spyware)
+                    $Object.UrlFiltering            = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.profiles.'url-filtering')
+                    $Object.FileBlocking            = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.profiles.'file-blocking')
+                    $Object.DataFiltering           = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.profiles.'data-filtering')
+                    $Object.WildFireAnalysis        = [HelperXml]::GetMembersFromXml($entry.'profile-setting'.profiles.'wildfire-analysis')
                 }
             }
 
             ## Log Setting
             $LogStart                 = [HelperXml]::parseCandidateConfigXml($entry.'log-start',$false)
-            $Object.LogAtSessionStart = [HelperApi]::TranslateBool($LogStart,$Object.LogAtSessionStart)
+            $Object.LogAtSessionStart = [HelperApi]::TranslatePaToBool($LogStart,$Object.LogAtSessionStart)
 
             $Object.LogForwarding     = [HelperXml]::parseCandidateConfigXml($entry.'log-setting',$false)
 
             $LogEnd = [HelperXml]::parseCandidateConfigXml($entry.'log-end',$false)
             if ($LogEnd) {
-                $Object.LogAtSessionEnd = [HelperApi]::TranslateBool($LogEnd,$Object.LogAtSessionEnd)
+                $Object.LogAtSessionEnd = [HelperApi]::TranslatePaToBool($LogEnd,$Object.LogAtSessionEnd)
             }
 
             ## Other Settings
             $Object.Schedule = [HelperXml]::parseCandidateConfigXml($entry.schedule,$false)
             
             $Dsri = [HelperXml]::parseCandidateConfigXml($entry.option.'disable-server-response-inspection',$false)
-            $Object.Dsri = [HelperApi]::TranslateBool($Dsri,$Object.Dsri)
+            $Object.Dsri = [HelperApi]::TranslatePaToBool($Dsri,$Object.Dsri)
 
             $QosMarkingType  = [HelperXml]::parseCandidateConfigXml($entry.qos.marking,$true)
 

@@ -1,6 +1,6 @@
 class HelperApi {
     # TranslateBool
-    static [bool] TranslateBool([string]$ApiBool,[bool]$DefaultValue) {
+    static [bool] TranslatePaToBool([string]$ApiBool,[bool]$DefaultValue) {
         if ($ApiBool -eq 'yes') {
             return $true
         } elseif ($ApiBool -eq 'no') {
@@ -9,6 +9,15 @@ class HelperApi {
             return $DefaultValue
         } else {
             Throw "Invalid bool value: $ApiBool"
+        }
+    }
+
+    # TranslateBoolToPa
+    static [bool] TranslateBoolToPa([bool]$ThisBool) {
+        if ($ThisBool) {
+            return 'yes'
+        } else {
+            return 'no'
         }
     }
 

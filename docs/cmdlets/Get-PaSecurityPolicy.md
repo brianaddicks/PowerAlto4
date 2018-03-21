@@ -1,32 +1,32 @@
-# Get-PaNatPolicy
+# Get-PaSecurityPolicy
 
 ## Synopsis
 
-Retrieve address objects from Palo Alto device.
+Retrieve Security Policies from Palo Alto device.
 
 ## Syntax
 
 ### postrulebase
 
 ```powershell
-Get-PaNatPolicy [[-Name] <String>] -PostRulebase 
+Get-PaSecurityPolicy [[-Name] <String>] -PostRulebase 
 ```
 
 ### prerulebase
 
 ```powershell
-Get-PaNatPolicy [[-Name] <String>] -PreRulebase 
+Get-PaSecurityPolicy [[-Name] <String>] -PreRulebase 
 ```
 
 ### rulebase
 
 ```powershell
-Get-PaNatPolicy [[-Name] <String>] 
+Get-PaSecurityPolicy [[-Name] <String>] 
 ```
 
 ## Description
 
-Retrieve address objects from Palo Alto device.
+Retrieve Security Policies from Palo Alto device.
 
 ## Examples
 

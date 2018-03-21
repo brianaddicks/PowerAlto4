@@ -1,22 +1,26 @@
 site_name: PowerAlto4 Docs
 theme: readthedocs
 pages:
+  - Home: index.md
   - Cmdlets:
+    - Get-PaDevice: cmdlets/Get-PaDevice.md
     - New-PaTag: cmdlets/New-PaTag.md
-    - Get-PaJob: cmdlets/Get-PaJob.md
+    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
     - Set-PaAddress: cmdlets/Set-PaAddress.md
+    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
+    - Get-PaJob: cmdlets/Get-PaJob.md
+    - Set-PaSecurityPolicy: cmdlets/Set-PaSecurityPolicy.md
+    - Set-PaUrlCategory: cmdlets/Set-PaUrlCategory.md
+    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
+    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
+    - Get-PaNatPolicy: cmdlets/Get-PaNatPolicy.md
+    - Get-PaSecurityPolicy: cmdlets/Get-PaSecurityPolicy.md
+    - Set-PaTargetVsys: cmdlets/Set-PaTargetVsys.md
+    - Get-PaTag: cmdlets/Get-PaTag.md
+    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
     - Get-PaAddress: cmdlets/Get-PaAddress.md
     - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
-    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
-    - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
-    - Set-PaTargetVsys: cmdlets/Set-PaTargetVsys.md
-    - Get-PaNatPolicy: cmdlets/Get-PaNatPolicy.md
-    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
-    - Get-PaDevice: cmdlets/Get-PaDevice.md
-    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
     - Set-PaTag: cmdlets/Set-PaTag.md
-    - Get-PaTag: cmdlets/Get-PaTag.md
-    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
-    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
-    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
-  - Home: index.md
+    - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
+    - Get-PaUrlCategory: cmdlets/Get-PaUrlCategory.md
+    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md

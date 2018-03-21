@@ -22,12 +22,17 @@ function Invoke-PaApiConfig {
         # get parameters
 		[Parameter(ParameterSetName="get",Mandatory=$True,Position=0)]
         [switch]$Get,
+
+        # edit parameters
+		[Parameter(ParameterSetName="edit",Mandatory=$True,Position=0)]
+        [switch]$Edit,
         
         # set parameters
 		[Parameter(ParameterSetName="set",Mandatory=$True,Position=0)]
         [switch]$Set,
 
         [Parameter(ParameterSetName="set",Mandatory=$True,Position=1)]
+        [Parameter(ParameterSetName="edit",Mandatory=$True,Position=1)]
         [string]$Element,
 
         # all parametersets
@@ -46,6 +51,9 @@ function Invoke-PaApiConfig {
             }
             'set' {
                 $Global:PaDeviceObject.invokeConfigQuery('set',$Xpath,$Element)
+            }
+            'edit' {
+                $Global:PaDeviceObject.invokeConfigQuery('edit',$Xpath,$Element)
             }
         }
 		

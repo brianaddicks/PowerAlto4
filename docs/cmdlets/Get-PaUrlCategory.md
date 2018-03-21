@@ -1,19 +1,19 @@
-# Get-PaAddress
+# Get-PaUrlCategory
 
 ## Synopsis
 
-Retrieve address objects from Palo Alto device.
+Retrieve Custom Url Categories from Palo Alto device.
 
 ## Syntax
 
 
 ```powershell
-Get-PaAddress [[-Name] <String>] 
+Get-PaUrlCategory [[-Name] <String>] 
 ```
 
 ## Description
 
-Retrieve address objects from Palo Alto device.
+Retrieve Custom Url Categories from Palo Alto device.
 
 ## Examples
 

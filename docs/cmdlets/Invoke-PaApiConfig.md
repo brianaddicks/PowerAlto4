@@ -12,6 +12,12 @@ Invokes a Palo Alto Config Api.
 Invoke-PaApiConfig [-Get] [-XPath] <String> 
 ```
 
+### edit
+
+```powershell
+Invoke-PaApiConfig [-Edit] [-Element] <String> [-XPath] <String> 
+```
+
 ### set
 
 ```powershell
@@ -59,6 +65,21 @@ Default value: False
 Accept pipeline input: false
 Accept wildcard characters: false
 ```
+### -Edit
+
+edit parameters
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: edit
+Aliases: 
+
+Required: true
+Position: 1
+Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
 ### -Set
 
 set parameters
@@ -79,7 +100,7 @@ Accept wildcard characters: false
 
 ```asciidoc
 Type: String
-Parameter Sets: set
+Parameter Sets: edit, set
 Aliases: 
 
 Required: true

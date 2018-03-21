@@ -1,26 +1,27 @@
 site_name: PowerAlto4 Docs
 theme: readthedocs
 pages:
-  - Home: index.md
   - Cmdlets:
-    - Get-PaDevice: cmdlets/Get-PaDevice.md
-    - New-PaTag: cmdlets/New-PaTag.md
-    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
-    - Set-PaAddress: cmdlets/Set-PaAddress.md
-    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
     - Get-PaJob: cmdlets/Get-PaJob.md
-    - Set-PaSecurityPolicy: cmdlets/Set-PaSecurityPolicy.md
-    - Set-PaUrlCategory: cmdlets/Set-PaUrlCategory.md
-    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
     - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
-    - Get-PaNatPolicy: cmdlets/Get-PaNatPolicy.md
-    - Get-PaSecurityPolicy: cmdlets/Get-PaSecurityPolicy.md
-    - Set-PaTargetVsys: cmdlets/Set-PaTargetVsys.md
-    - Get-PaTag: cmdlets/Get-PaTag.md
-    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
+    - Set-PaTargetDeviceGroup: cmdlets/Set-PaTargetDeviceGroup.md
+    - Get-PaUrlCategory: cmdlets/Get-PaUrlCategory.md
+    - Get-PaDevice: cmdlets/Get-PaDevice.md
     - Get-PaAddress: cmdlets/Get-PaAddress.md
+    - Get-PaTag: cmdlets/Get-PaTag.md
+    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
+    - Get-PaNatPolicy: cmdlets/Get-PaNatPolicy.md
+    - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
+    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
     - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
     - Set-PaTag: cmdlets/Set-PaTag.md
-    - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
-    - Get-PaUrlCategory: cmdlets/Get-PaUrlCategory.md
-    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
+    - Get-PaSecurityPolicy: cmdlets/Get-PaSecurityPolicy.md
+    - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
+    - New-PaTag: cmdlets/New-PaTag.md
+    - Set-PaTargetVsys: cmdlets/Set-PaTargetVsys.md
+    - Set-PaSecurityPolicy: cmdlets/Set-PaSecurityPolicy.md
+    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
+    - Set-PaAddress: cmdlets/Set-PaAddress.md
+    - Set-PaUrlCategory: cmdlets/Set-PaUrlCategory.md
+    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
+  - Home: index.md

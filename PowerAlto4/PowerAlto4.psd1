@@ -12,7 +12,7 @@
 RootModule = 'PowerAlto4.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.5'
+ModuleVersion = '0.0.6'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -111,7 +111,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Added Get/Set-PaUrlCategory,Get-PaSecurityRule'
+        ReleaseNotes = 'Added Set-PaTargetDeviceGroup'
 
         # Prerelease string of this module
         # Prerelease = ''

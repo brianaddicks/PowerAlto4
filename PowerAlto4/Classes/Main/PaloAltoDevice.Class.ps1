@@ -156,6 +156,10 @@ class PaloAltoDevice {
                 }
                 Throw $Message
             }
+            'unauth' {
+                $Message = $unprocessedResult.response.msg.line
+                Throw $Message
+            }
         }
 
         return $result

@@ -74,10 +74,12 @@ class PaCustomReport {
             }
         }
 
-        # Create SortBy Node
-        $SortByNode = $Doc.CreateNode("element",'sortby',$null)
-        $SortByNode.InnerText = $this.SortBy
-        $DatabaseNode.AppendChild($SortByNode)
+        if ($this.SortBy) {
+            # Create SortBy Node
+            $SortByNode = $Doc.CreateNode("element",'sortby',$null)
+            $SortByNode.InnerText = $this.SortBy
+            $DatabaseNode.AppendChild($SortByNode)
+        }
 
         # Add aggregate/value nodes to database node
         $DatabaseNode.AppendChild($AggregateNode)
@@ -109,10 +111,17 @@ class PaCustomReport {
         $GroupsNode.InnerText = $this.Description
         $EntryNode.AppendChild($GroupsNode)
 
-        # Create/Add Query to Entry
-        $QueryNode = $Doc.CreateNode("element",'query',$null)
-        $QueryNode.InnerText = $this.Query
-        $EntryNode.AppendChild($QueryNode)
+        # Create/Add Description to Entry
+        $GroupsNode = $Doc.CreateNode("element",'caption',$null)
+        $GroupsNode.InnerText = $this.Name
+        $EntryNode.AppendChild($GroupsNode)
+
+        if ($this.Query) {
+            # Create/Add Query to Entry
+            $QueryNode = $Doc.CreateNode("element",'query',$null)
+            $QueryNode.InnerText = $this.Query
+            $EntryNode.AppendChild($QueryNode)
+        }
 
         # Append Entry to Root and Root to Doc
         $root.AppendChild($EntryNode)

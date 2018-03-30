@@ -19,28 +19,26 @@ function Invoke-PaCustomReport {
 	Param (
 		[Parameter(Mandatory=$True,Position=0)]
 		[string]$Name,
-
-		[Parameter(Mandatory=$False,Position=1)]
-		[string]$Vsys
+        
+        [Parameter(Mandatory=$False)]
+		[switch]$ShowProgress
 	)
 
     BEGIN {
         $VerbosePrefix = "Invoke-PaCustomReport:"
-        $ReportXPath = '/config/'
-        
-        if (!($Vsys)) {
-            $ReportXPath += "shared/"
-        } else {
-            $ReportXPath += "devices/entry/vsys/entry[@name='$Vsys']/"
-        }
 
-        $ReportXPath += "reports/entry[@name='$Name']"
+        $VerbosePrefix = "Get-PaAddress:"
+        $XPathNode = 'reports'
+        $Xpath = $Global:PaDeviceObject.createXPath($XPathNode,$Name)
     }
 
     PROCESS {
         # Get the config info for the report
         # This is required for the call to run the report
-        $ReportConfig = Invoke-PaApiConfig -Get -Xpath $ReportXPath
+        $ReportConfig = Invoke-PaApiConfig -Get -Xpath $Xpath
+        if ($ReportConfig.response.result -eq "") {
+            Throw "$VerbosePrefix Report not found: $Name"
+        }
         
         # Extract the required xml
         $ReportXml = $ReportConfig.response.result.entry.InnerXml
@@ -55,7 +53,7 @@ function Invoke-PaCustomReport {
 
         # https://<firewall>/api/?type=report&action=get&job-id=jobid
 
-        $GetJob = $Global:PaDeviceObject.invokeReportGetQuery($JobId)
+        $GetJob = Get-PaJob -JobId $JobId -Wait -ShowProgress:$ShowProgress -ReportJob
         
         return $GetJob
     }

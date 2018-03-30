@@ -22,7 +22,10 @@ function Get-PaJob {
         
         [Parameter(ParameterSetName="singlejob",Mandatory=$False)]
         [Parameter(ParameterSetName="latest",Mandatory=$False)]
-		[switch]$ShowProgress
+        [switch]$ShowProgress,
+        
+        [Parameter(Mandatory=$False)]
+        [switch]$ReportJob
 	)
 
     BEGIN {
@@ -37,7 +40,11 @@ function Get-PaJob {
     }
 
     PROCESS {
-        $Query = Invoke-PaApiOperation -Cmd $Cmd
+        if ($ReportJob) {
+            $Query = $global:PaDeviceObject.invokeReportGetQuery($JobId)
+        } else {
+            $Query = Invoke-PaApiOperation -Cmd $Cmd
+        }
         $Results = $Query.response.result.job
 
         if ($Latest) {
@@ -59,7 +66,7 @@ function Get-PaJob {
             $Job.Description  = $result.description
             $Job.User         = $result.user
             $Job.Progress     = $result.progress
-            if ($Job.Status -eq 'FIN') {
+            if (($Job.Status -eq 'FIN') -and (!($ReportJob))) {
                 $Job.TimeComplete = Get-Date $result.tfin
             }
         }
@@ -88,7 +95,7 @@ function Get-PaJob {
                     Start-Sleep -Seconds 10
                 }
                 Write-Verbose "$VerbosePrefix Checking again"
-                $Job = Get-PaJob -JobId $Job.Id
+                $Job = Get-PaJob -JobId $Job.Id -ReportJob:$ReportJob
                 $ProgressParams.PercentComplete = $Job.Progress
                 $ProgressParams.Status = "$($Job.Progress) %"
                 Write-Progress @ProgressParams
@@ -98,7 +105,10 @@ function Get-PaJob {
 
             $ReturnObject = $Job
         }
-
-        $ReturnObject
+        if ($ReportJob) {
+            $Global:PaDeviceObject.LastResult.response.result.report.entry
+        } else {
+            $ReturnObject
+        }
     }
 }

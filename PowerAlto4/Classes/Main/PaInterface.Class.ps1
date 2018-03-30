@@ -15,6 +15,10 @@ class PaInterface {
 
     # Advanced
     [string]$ManagementProfile
+
+    # Static Properties
+    static [String] $XPathNode    = "network/interface"
+    static [String] $ResponseNode = "interface"
     
     
 

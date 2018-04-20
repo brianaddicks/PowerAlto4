@@ -66,7 +66,11 @@ function Get-PaJob {
             $Job.Details      = $result.details.line -join "`r`n"
             $Job.Description  = $result.description
             $Job.User         = $result.user
-            $Job.Progress     = $result.progress
+            if ($ReportJob) {
+                $Job.Progress = $result.percent
+            } else {
+                $Job.Progress = $result.progress
+            }
             if (($Job.Status -eq 'FIN') -and (!($ReportJob))) {
                 $Job.TimeComplete = Get-Date $result.tfin
             }

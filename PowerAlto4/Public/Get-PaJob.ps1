@@ -53,6 +53,7 @@ function Get-PaJob {
 
         $ReturnObject = @()
         foreach ($result in $Results) {
+            $JobId = $result.id
             $Job = [PaJob]::new($result.id)
             $ReturnObject += $Job
 
@@ -94,11 +95,11 @@ function Get-PaJob {
                 } else {
                     Start-Sleep -Seconds 10
                 }
-                Write-Verbose "$VerbosePrefix Checking again $($Job.Id)"
+                Write-Verbose "$VerbosePrefix Checking again $($JobId)"
                 if ($ReportJob) {
-                    $Job = Get-PaJob -JobId $Job.Id -ReportJob
+                    $Job = Get-PaJob -JobId $JobId -ReportJob
                 } else {
-                    $Job = Get-PaJob -JobId $Job.Id
+                    $Job = Get-PaJob -JobId $JobId
                 }
                 if ($ShowProgress) {
                     $ProgressParams.PercentComplete = $Job.Progress

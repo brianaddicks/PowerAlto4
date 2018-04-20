@@ -46,7 +46,7 @@ function Get-PaCustomReport {
             # Get Node Name Properties
             $ShortDatabaseName = [HelperXml]::parseCandidateConfigXml($entry.type,$true)
             $Report.Database = $Report.TranslateDatabaseName($ShortDatabaseName,'Friendly')
-            Write-Verbose "$VerbosePrefix adding report: Name $($entry.name), Database $($Report.Database)"
+            Write-Verbose "$VerbosePrefix getting report: Name $($entry.name), Database $($Report.Database)"
 
             # Add other properties to report
             $Report.Columns      = [HelperXml]::parseCandidateConfigXml($entry.type.$ShortDatabaseName.'aggregate-by'.member,$false)

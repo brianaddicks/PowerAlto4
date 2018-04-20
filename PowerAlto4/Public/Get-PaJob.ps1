@@ -76,6 +76,8 @@ function Get-PaJob {
             }
         }
 
+        Write-Verbose "Current Progress: $($Job.Progress)"
+        
         if (($Wait -or $ShowProgress) -and ($Job.Progress -ne 100) -and ($Job.Status -ne 'FIN')) {
             Write-Verbose "$VerbosePrefix Job not complete"
             

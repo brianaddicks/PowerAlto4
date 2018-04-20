@@ -8,7 +8,7 @@ Runs a Custom Palo Alto Report and retrieves results.
 
 
 ```powershell
-Invoke-PaCustomReport [-Name] <String> [[-Vsys] <String>] 
+Invoke-PaCustomReport [-Name] <String> [-ShowProgress] 
 ```
 
 ## Description
@@ -51,17 +51,17 @@ Default value:
 Accept pipeline input: false
 Accept wildcard characters: false
 ```
-### -Vsys
+### -ShowProgress
 
 
 ```asciidoc
-Type: String
+Type: SwitchParameter
 Parameter Sets: All
 Aliases: 
 
 Required: false
-Position: 2
-Default value: 
+Position: named
+Default value: False
 Accept pipeline input: false
 Accept wildcard characters: false
 ```

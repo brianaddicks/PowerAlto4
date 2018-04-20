@@ -9,19 +9,19 @@ Gets job status from Palo Alto Device.
 ### singlejob
 
 ```powershell
-Get-PaJob [-JobId] <Int32> [-Wait] [-ShowProgress] 
+Get-PaJob [-JobId] <Int32> [-Wait] [-ShowProgress] [-ReportJob] 
 ```
 
 ### alljobs
 
 ```powershell
-Get-PaJob [[-JobId] <Int32>] 
+Get-PaJob [[-JobId] <Int32>] [-ReportJob] 
 ```
 
 ### latest
 
 ```powershell
-Get-PaJob [-Latest] [-Wait] [-ShowProgress] 
+Get-PaJob [-Latest] [-Wait] [-ShowProgress] [-ReportJob] 
 ```
 
 ## Description
@@ -80,6 +80,20 @@ Accept wildcard characters: false
 ```asciidoc
 Type: SwitchParameter
 Parameter Sets: singlejob, latest
+Aliases: 
+
+Required: false
+Position: named
+Default value: False
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -ReportJob
+
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: All
 Aliases: 
 
 Required: false

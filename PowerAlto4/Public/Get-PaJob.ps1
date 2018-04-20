@@ -24,7 +24,7 @@ function Get-PaJob {
         [Parameter(ParameterSetName="latest",Mandatory=$False)]
         [switch]$ShowProgress,
         
-        [Parameter(Mandatory=$False)]
+        [Parameter(ParameterSetName="singlejob",Mandatory=$False)]
         [switch]$ReportJob
 	)
 
@@ -94,11 +94,17 @@ function Get-PaJob {
                 } else {
                     Start-Sleep -Seconds 10
                 }
-                Write-Verbose "$VerbosePrefix Checking again"
-                $Job = Get-PaJob -JobId $Job.Id -ReportJob:$ReportJob
-                $ProgressParams.PercentComplete = $Job.Progress
-                $ProgressParams.Status = "$($Job.Progress) %"
-                Write-Progress @ProgressParams
+                Write-Verbose "$VerbosePrefix Checking again $($Job.Id)"
+                if ($ReportJob) {
+                    $Job = Get-PaJob -JobId $Job.Id -ReportJob
+                } else {
+                    $Job = Get-PaJob -JobId $Job.Id
+                }
+                if ($ShowProgress) {
+                    $ProgressParams.PercentComplete = $Job.Progress
+                    $ProgressParams.Status = "$($Job.Progress) %"
+                    Write-Progress @ProgressParams
+                }
                 Write-Verbose "$VerbosePrefix Progress: $($Job.Progress)"
 
             } while ($Job.Status -ne 'FIN')

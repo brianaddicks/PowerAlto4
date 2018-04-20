@@ -119,9 +119,36 @@ class PaloAltoDevice {
 
         # try query
         try {
-            $rawResult = Invoke-WebRequest -Uri $url -SkipCertificateCheck -UseBasicParsing
+            $QueryParams = @{}
+            $QueryParams.Uri = $url
+            $QueryParams.UseBasicParsing = $true
+
+            switch ($global:PSVersionTable.PSEdition) {
+                'Core' {
+                    $QueryParams.SkipCertificateCheck = $true
+                    continue
+                }
+                default {
+                    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                    add-type @"
+    using System.Net;
+    using System.Security.Cryptography.X509Certificates;
+    public class TrustAllCertsPolicy : ICertificatePolicy {
+        public bool CheckValidationResult(
+            ServicePoint srvPoint, X509Certificate certificate,
+            WebRequest request, int certificateProblem) {
+            return true;
+        }
+    }
+"@
+                    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+                    continue
+                }
+            }
+
+            $rawResult = Invoke-WebRequest @QueryParams
         } catch {
-            Throw "$($error[0].ToString()) $($error[0].InvocationInfo.PositionMessage)"
+            Throw $_
         }
 
         $result                      = [xml]($rawResult.Content)

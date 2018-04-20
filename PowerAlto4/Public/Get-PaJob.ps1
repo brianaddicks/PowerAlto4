@@ -114,7 +114,11 @@ function Get-PaJob {
                 }
                 Write-Verbose "$VerbosePrefix Progress: $($Job.Progress)"
 
-            } while ($Job.Status  -and ($Job.Status -ne 'FIN'))
+                if (!($Job.Status) -and $ReportJob) {
+                    break
+                }
+
+            } while ($Job.Status -ne 'FIN')
 
             $ReturnObject = $Job
         }

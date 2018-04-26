@@ -53,7 +53,7 @@ function Invoke-PaCustomReport {
 
         # https://<firewall>/api/?type=report&action=get&job-id=jobid
 
-        $GetJob = Get-PaJob -JobId $JobId -Wait -ShowProgress:$ShowProgress -ReportJob
+        $GetJob = Get-PaReportJob -JobId $JobId -Wait -ShowProgress:$ShowProgress
         
         return $GetJob
     }

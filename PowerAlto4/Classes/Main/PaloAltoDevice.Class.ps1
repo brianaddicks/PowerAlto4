@@ -39,6 +39,8 @@ class PaloAltoDevice {
     [string] createXPath ([string]$ConfigNode,[string]$Name) {
         $XPath = '/config'
         $this.ConfigNode = $ConfigNode
+        $ObjectsInSharedOnNonVsysSystems = @()
+        $ObjectsInSharedOnNonVsysSystems += 'reports'
 
         # choose correct vsys/device-group
         if ($this.Model -eq "Panorama") {
@@ -55,7 +57,11 @@ class PaloAltoDevice {
                     $XPath +="/devices/entry/vsys/entry[@name='$($this.TargetVsys)']"
                 }
             } else {
-                $XPath +="/devices/entry/vsys/entry[@name='vsys1']"
+                if ($ObjectsInSharedOnNonVsysSystems -contains $ConfigNode) {
+                    $XPath += '/shared'
+                } else {
+                    $XPath +="/devices/entry/vsys/entry[@name='vsys1']"
+                }
             }
         }
 

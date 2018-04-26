@@ -50,7 +50,7 @@ function Get-PaReportJob {
             if (($Job.Progress -eq 100) -or ($Job.Status -eq 'FIN')) {
                 Write-Verbose "Job Done!"
             } else {
-                $SleepTime = 1
+                $SleepTime = 10
                 do {
                     Write-Verbose "Job Not Done! Waiting $SleepTime seconds"
                     Start-Sleep -Seconds $SleepTime

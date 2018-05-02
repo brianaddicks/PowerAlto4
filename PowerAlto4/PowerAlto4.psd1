@@ -12,7 +12,7 @@
 RootModule = 'PowerAlto4.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.8'
+ModuleVersion = '0.0.9'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -111,7 +111,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'fixed some issues with non-pscore installs'
+        ReleaseNotes = 'fixed some more issues with non-pscore installs'
 
         # Prerelease string of this module
         # Prerelease = ''

@@ -137,9 +137,7 @@ class PaloAltoDevice {
                 default {
                     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
                     try {
-                        $TrustAllCerts = [TrustAllCertsPolicy2]
-                    } catch {
-                        add-type @"
+                    add-type @"
     using System.Net;
     using System.Security.Cryptography.X509Certificates;
     public class TrustAllCertsPolicy : ICertificatePolicy {
@@ -150,8 +148,10 @@ class PaloAltoDevice {
         }
     }
 "@
-                        [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+                    } catch {
+                        
                     }
+                    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
                     continue
                 }
             }

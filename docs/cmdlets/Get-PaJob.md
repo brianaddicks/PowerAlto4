@@ -15,13 +15,13 @@ Get-PaJob [-JobId] <Int32> [-Wait] [-ShowProgress] [-ReportJob]
 ### alljobs
 
 ```powershell
-Get-PaJob [[-JobId] <Int32>] [-ReportJob] 
+Get-PaJob [[-JobId] <Int32>] 
 ```
 
 ### latest
 
 ```powershell
-Get-PaJob [-Latest] [-Wait] [-ShowProgress] [-ReportJob] 
+Get-PaJob [-Latest] [-Wait] [-ShowProgress] 
 ```
 
 ## Description
@@ -93,7 +93,7 @@ Accept wildcard characters: false
 
 ```asciidoc
 Type: SwitchParameter
-Parameter Sets: All
+Parameter Sets: singlejob
 Aliases: 
 
 Required: false

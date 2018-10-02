@@ -1,26 +1,38 @@
-# Set-PaSecurityPolicy
+# Set-PaAddressGroup
 
 ## Synopsis
 
-Creates/Configures a Security Policy on a Palo Alto device.
+Creates/Configures an address object on a Palo Alto device.
 
 ## Syntax
 
-### name
+### name-filter
 
 ```powershell
-Set-PaSecurityPolicy [-Name] <String> [-SourceZone <String[]>] [-SourceUser <String[]>] [-DestinationZone <String[]>] [-DestinationAddress <String[]>] [-Action <String>] [-WhatIf] [-Confirm] 
+Set-PaAddressGroup [-Name] <String> -Filter <String> [-Description <String>] [-Tag <String[]>] [-WhatIf] [-Confirm] 
 ```
 
-### paobject
+### name-member
 
 ```powershell
-Set-PaSecurityPolicy [-PaSecurityPolicy] <PaSecurityPolicy> [-SourceZone <String[]>] [-SourceUser <String[]>] [-DestinationZone <String[]>] [-DestinationAddress <String[]>] [-Action <String>] [-WhatIf] [-Confirm] 
+Set-PaAddressGroup [-Name] <String> -Member <String> [-Description <String>] [-Tag <String[]>] [-WhatIf] [-Confirm] 
+```
+
+### object-filter
+
+```powershell
+Set-PaAddressGroup [-PaAddressGroup] <PaAddressGroup> [-Filter <String>] [-Description <String>] [-Tag <String[]>] [-WhatIf] [-Confirm] 
+```
+
+### object-member
+
+```powershell
+Set-PaAddressGroup [-PaAddressGroup] <PaAddressGroup> [-Member <String>] [-Description <String>] [-Tag <String[]>] [-WhatIf] [-Confirm] 
 ```
 
 ## Description
 
-Creates/Configures a Security Policy on a Palo Alto device.
+Creates/Configures an address object on a Palo Alto device.
 
 ## Examples
 
@@ -49,7 +61,7 @@ PS c:\>
 
 ```asciidoc
 Type: String
-Parameter Sets: name
+Parameter Sets: name-filter, name-member
 Aliases: 
 
 Required: true
@@ -58,12 +70,12 @@ Default value:
 Accept pipeline input: false
 Accept wildcard characters: false
 ```
-### -PaSecurityPolicy
+### -PaAddressGroup
 
 
 ```asciidoc
-Type: PaSecurityPolicy
-Parameter Sets: paobject
+Type: PaAddressGroup
+Parameter Sets: object-filter, object-member
 Aliases: 
 
 Required: true
@@ -72,67 +84,53 @@ Default value:
 Accept pipeline input: true (ByValue)
 Accept wildcard characters: false
 ```
-### -SourceZone
-
-
-```asciidoc
-Type: String[]
-Parameter Sets: All
-Aliases: 
-
-Required: false
-Position: named
-Default value: 
-Accept pipeline input: false
-Accept wildcard characters: false
-```
-### -SourceUser
-
-
-```asciidoc
-Type: String[]
-Parameter Sets: All
-Aliases: 
-
-Required: false
-Position: named
-Default value: 
-Accept pipeline input: false
-Accept wildcard characters: false
-```
-### -DestinationZone
-
-
-```asciidoc
-Type: String[]
-Parameter Sets: All
-Aliases: 
-
-Required: false
-Position: named
-Default value: 
-Accept pipeline input: false
-Accept wildcard characters: false
-```
-### -DestinationAddress
-
-
-```asciidoc
-Type: String[]
-Parameter Sets: All
-Aliases: 
-
-Required: false
-Position: named
-Default value: 
-Accept pipeline input: false
-Accept wildcard characters: false
-```
-### -Action
+### -Filter
 
 
 ```asciidoc
 Type: String
+Parameter Sets: name-filter, object-filter
+Aliases: 
+
+Required: true
+Position: named
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Member
+
+
+```asciidoc
+Type: String
+Parameter Sets: name-member, object-member
+Aliases: 
+
+Required: true
+Position: named
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Description
+
+
+```asciidoc
+Type: String
+Parameter Sets: All
+Aliases: 
+
+Required: false
+Position: named
+Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Tag
+
+
+```asciidoc
+Type: String[]
 Parameter Sets: All
 Aliases: 
 

@@ -16,10 +16,10 @@ class PaloAltoDevice {
     # Settings
     [bool]$VsysEnabled
 
-    [ValidateRange(1,65535)]
+    [ValidateRange(1, 65535)]
     [int]$Port = 443
 
-    [ValidateSet('http','https')] 
+    [ValidateSet('http', 'https')]
     [string]$Protocol = "https"
 
     # Context Data
@@ -36,7 +36,7 @@ class PaloAltoDevice {
     $LastResult
 
     # Create XPath
-    [string] createXPath ([string]$ConfigNode,[string]$Name) {
+    [string] createXPath ([string]$ConfigNode, [string]$Name) {
         $XPath = '/config'
         $this.ConfigNode = $ConfigNode
         $ObjectsInSharedOnNonVsysSystems = @()
@@ -54,13 +54,13 @@ class PaloAltoDevice {
                 if ($this.TargetVsys -eq 'shared') {
                     $XPath += '/shared'
                 } else {
-                    $XPath +="/devices/entry/vsys/entry[@name='$($this.TargetVsys)']"
+                    $XPath += "/devices/entry/vsys/entry[@name='$($this.TargetVsys)']"
                 }
             } else {
                 if ($ObjectsInSharedOnNonVsysSystems -contains $ConfigNode) {
                     $XPath += '/shared'
                 } else {
-                    $XPath +="/devices/entry/vsys/entry[@name='vsys1']"
+                    $XPath += "/devices/entry/vsys/entry[@name='vsys1']"
                 }
             }
         }
@@ -109,15 +109,15 @@ class PaloAltoDevice {
 
         # format the query string and general the full url
         $formattedQueryString = [HelperWeb]::createQueryString($queryString)
-        $url                  = $this.getApiUrl($formattedQueryString)
+        $url = $this.getApiUrl($formattedQueryString)
 
         # Populate Query/Url History
         # Redact password if it's a keygen query
         if ($queryString.type -ne "keygen") {
             $this.UrlHistory += $url
         } else {
-            $this.UrlHistory += $url.Replace($queryString.password,"PASSWORDREDACTED")
-            $queryString.password = $queryString.password,"PASSWORDREDACTED"
+            $this.UrlHistory += $url.Replace($queryString.password, "PASSWORDREDACTED")
+            $queryString.password = $queryString.password, "PASSWORDREDACTED"
         }
 
         # add query object to QueryHistory
@@ -137,7 +137,7 @@ class PaloAltoDevice {
                 default {
                     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
                     try {
-                    add-type @"
+                        add-type @"
     using System.Net;
     using System.Security.Cryptography.X509Certificates;
     public class TrustAllCertsPolicy : ICertificatePolicy {
@@ -149,7 +149,7 @@ class PaloAltoDevice {
     }
 "@
                     } catch {
-                        
+
                     }
                     [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
                     continue
@@ -161,12 +161,12 @@ class PaloAltoDevice {
             Throw $_
         }
 
-        $result                      = [xml]($rawResult.Content)
+        $result = [xml]($rawResult.Content)
         $this.RawQueryResultHistory += $rawResult
-        $this.LastResult             = $result
+        $this.LastResult = $result
 
         $proccessedResult = $this.processQueryResult($result)
-        
+
         return $proccessedResult
     }
 
@@ -212,7 +212,7 @@ class PaloAltoDevice {
         $this.ApiKey = $result.response.result.key
         return $result
     }
-    
+
     # Commit API Query
     [xml] invokeCommitQuery([string]$cmd) {
         $queryString = @{}
@@ -232,35 +232,44 @@ class PaloAltoDevice {
     }
 
     # invokeConfigQuery without element
-    [Xml] invokeConfigQuery([string]$action,[string]$XPath) {
-        $queryString         = @{}
-        $queryString.type    = "config"
-        $queryString.action  = $action
-        $queryString.xpath   = $xPath
+    [Xml] invokeConfigQuery([string]$Action, [string]$XPath) {
+        $queryString = @{}
+        $queryString.type = "config"
+        $queryString.action = $Action
+        $queryString.xpath = $xPath
 
         $result = $this.invokeApiQuery($queryString)
         return $result
     }
 
-    # invokeConfigQuery with element
-    [Xml] invokeConfigQuery([string]$action,[string]$XPath,[string]$Element) {
-        $queryString         = @{}
-        $queryString.type    = "config"
-        $queryString.action  = $action
-        $queryString.xpath   = $XPath
-        $queryString.element = $Element
+    # invokeConfigQuery with element/location
+    [Xml] invokeConfigQuery([string]$Action, [string]$XPath, [string]$Element) {
+        $queryString = @{}
+        $queryString.type = "config"
+        $queryString.action = $Action
+        $queryString.xpath = $XPath
+        switch ($Action) {
+            'move' {
+                $queryString.where = $Element
+                continue
+            }
+            'set' {
+                $queryString.element = $Element
+                continue
+            }
+        }
 
         $result = $this.invokeApiQuery($queryString)
         return $result
     }
 
     # invokeReportQuery
-    [Xml] invokeReportQuery([string]$ReportType,[string]$ReportName,[string]$Cmd) {
-        $queryString            = @{}
-        $queryString.type       = "report"
+    [Xml] invokeReportQuery([string]$ReportType, [string]$ReportName, [string]$Cmd) {
+        $queryString = @{}
+        $queryString.type = "report"
         $queryString.reporttype = $ReportType
         $queryString.reportname = $ReportName
-        $queryString.cmd        = $Cmd
+        $queryString.cmd = $Cmd
 
         $result = $this.invokeApiQuery($queryString)
         return $result
@@ -268,9 +277,9 @@ class PaloAltoDevice {
 
     # invokeReportGetQuery
     [Xml] invokeReportGetQuery([int]$JobId) {
-        $queryString          = @{}
-        $queryString.type     = "report"
-        $queryString.action   = "get"
+        $queryString = @{}
+        $queryString.type = "report"
+        $queryString.action = "get"
         $queryString.'job-id' = $JobId
 
         $result = $this.invokeApiQuery($queryString)
@@ -282,17 +291,17 @@ class PaloAltoDevice {
     # Test Connection
     [bool] testConnection() {
         $result = $this.invokeOperationalQuery('<show><system><info></info></system></show>')
-        $this.Connected       = $true
-        $this.Name            = $result.response.result.system.devicename
-        $this.Hostname        = $result.response.result.system.'ip-address'
-        $this.Model           = $result.response.result.system.model
-        $this.Serial          = $result.response.result.system.serial
-        $this.OsVersion       = $result.response.result.system.'sw-version'
-        $this.GpAgent         = $result.response.result.system.'global-protect-client-package-version'
-        $this.AppVersion      = $result.response.result.system.'app-version'
-        $this.ThreatVersion   = $result.response.result.system.'threat-version'
+        $this.Connected = $true
+        $this.Name = $result.response.result.system.devicename
+        $this.Hostname = $result.response.result.system.'ip-address'
+        $this.Model = $result.response.result.system.model
+        $this.Serial = $result.response.result.system.serial
+        $this.OsVersion = $result.response.result.system.'sw-version'
+        $this.GpAgent = $result.response.result.system.'global-protect-client-package-version'
+        $this.AppVersion = $result.response.result.system.'app-version'
+        $this.ThreatVersion = $result.response.result.system.'threat-version'
         $this.WildFireVersion = $result.response.result.system.'wildfire-version'
-        $this.UrlVersion      = $result.response.result.system.'url-filtering-version'
+        $this.UrlVersion = $result.response.result.system.'url-filtering-version'
         if ($result.response.result.system.'multi-vsys' -eq 'on') {
             $this.VsysEnabled = $true
         } else {
@@ -303,13 +312,13 @@ class PaloAltoDevice {
 
     ##################################### Initiators #####################################
     # Initiator with apikey
-    PaloAltoDevice([string]$Hostname,[string]$ApiKey) {
+    PaloAltoDevice([string]$Hostname, [string]$ApiKey) {
         $this.Hostname = $Hostname
         $this.ApiKey = $ApiKey
     }
 
     # Initiator with Credential
-    PaloAltoDevice([string]$Hostname,[PSCredential]$Credential) {
+    PaloAltoDevice([string]$Hostname, [PSCredential]$Credential) {
         $this.Hostname = $Hostname
         $this.invokeKeygenQuery($Credential)
     }

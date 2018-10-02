@@ -82,13 +82,11 @@ function Set-PaAddressGroup {
             $ConfigObject.Member = $Member
         }
 
-
         $ShouldProcessMessage += "Value: $Value`r`n"
 
         $ElementXml = $ConfigObject.ToXml().'address-group'.entry.InnerXml
         $Xpath = $Global:PaDeviceObject.createXPath('address-group', $ConfigObject.Name)
         $ShouldProcessMessage += "XPath: $XPath"
-        $global:test = $ConfigObject
 
         if ($PSCmdlet.ShouldProcess($ShouldProcessMessage)) {
             $Set = Invoke-PaApiConfig -Set -Xpath $XPath -Element $ElementXml

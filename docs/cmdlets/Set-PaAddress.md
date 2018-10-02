@@ -6,22 +6,16 @@ Creates/Configures an address object on a Palo Alto device.
 
 ## Syntax
 
-### ip-netmask
+### name
 
 ```powershell
-Set-PaAddress [-Name] <String> -IpNetmask <String> [-Description <String>] [-Tags <Array>] [-WhatIf] [-Confirm] 
+Set-PaAddress [-Name] <String> -Type <String> -Value <String> [-Description <String>] [-Tag <String[]>] [-WhatIf] [-Confirm] 
 ```
 
-### ip-range
+### paaddress
 
 ```powershell
-Set-PaAddress [-Name] <String> -IpRange <String> [-Description <String>] [-Tags <Array>] [-WhatIf] [-Confirm] 
-```
-
-### fqdn
-
-```powershell
-Set-PaAddress [-Name] <String> -Fqdn <String> [-Description <String>] [-Tags <Array>] [-WhatIf] [-Confirm] 
+Set-PaAddress [-PaAddress] <PaAddress> [-Type <String>] [-Value <String>] [-Description <String>] [-Tag <String[]>] [-WhatIf] [-Confirm] 
 ```
 
 ## Description
@@ -55,7 +49,7 @@ PS c:\>
 
 ```asciidoc
 Type: String
-Parameter Sets: All
+Parameter Sets: name
 Aliases: 
 
 Required: true
@@ -64,12 +58,26 @@ Default value:
 Accept pipeline input: false
 Accept wildcard characters: false
 ```
-### -IpNetmask
+### -PaAddress
+
+
+```asciidoc
+Type: PaAddress
+Parameter Sets: paaddress
+Aliases: 
+
+Required: true
+Position: 1
+Default value: 
+Accept pipeline input: true (ByValue)
+Accept wildcard characters: false
+```
+### -Type
 
 
 ```asciidoc
 Type: String
-Parameter Sets: ip-netmask
+Parameter Sets: All
 Aliases: 
 
 Required: true
@@ -78,26 +86,12 @@ Default value:
 Accept pipeline input: false
 Accept wildcard characters: false
 ```
-### -IpRange
+### -Value
 
 
 ```asciidoc
 Type: String
-Parameter Sets: ip-range
-Aliases: 
-
-Required: true
-Position: named
-Default value: 
-Accept pipeline input: false
-Accept wildcard characters: false
-```
-### -Fqdn
-
-
-```asciidoc
-Type: String
-Parameter Sets: fqdn
+Parameter Sets: All
 Aliases: 
 
 Required: true
@@ -120,11 +114,11 @@ Default value:
 Accept pipeline input: false
 Accept wildcard characters: false
 ```
-### -Tags
+### -Tag
 
 
 ```asciidoc
-Type: Array
+Type: String[]
 Parameter Sets: All
 Aliases: 
 

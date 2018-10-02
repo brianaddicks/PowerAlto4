@@ -1,65 +1,99 @@
 function Set-PaAddress {
-	<#
+    <#
 	.SYNOPSIS
 		Creates/Configures an address object on a Palo Alto device.
-		
+
 	.DESCRIPTION
 		Creates/Configures an address object on a Palo Alto device.
 
 	.EXAMPLE
-		
-	.PARAMETER Name
-		
-	#>
-	[CmdletBinding(SupportsShouldProcess=$True)]
 
-	Param (
-		[Parameter(Mandatory=$True,Position=0)]
+	.PARAMETER Name
+
+	#>
+    [CmdletBinding(SupportsShouldProcess = $True)]
+
+    Param (
+        [Parameter(ParameterSetName = "name", Mandatory = $True, Position = 0)]
         [string]$Name,
 
-        [Parameter(ParameterSetName="ip-netmask",Mandatory=$True)]
-        [string]$IpNetmask,
-        
-        [Parameter(ParameterSetName="ip-range",Mandatory=$True)]
-        [string]$IpRange,
-        
-        [Parameter(ParameterSetName="fqdn",Mandatory=$True)]
-		[string]$Fqdn,
-        
-        [Parameter(Mandatory=$False)]
+        [Parameter(ValueFromPipeline, ParameterSetName = "paaddress", Mandatory = $True, Position = 0)]
+        [PaAddress]$PaAddress,
+
+        [Parameter(ParameterSetName = "name", Mandatory = $True)]
+        [Parameter(ParameterSetName = "paaddress", Mandatory = $False)]
+        [ValidateSet('ip-netmask', 'ip-range', 'fqdn')]
+        [string]$Type,
+
+        [Parameter(ParameterSetName = "name", Mandatory = $True)]
+        [Parameter(ParameterSetName = "paaddress", Mandatory = $False)]
+        [string]$Value,
+
+        [Parameter(Mandatory = $False)]
         [string]$Description,
-        
-        [Parameter(Mandatory=$False)]
-		[array]$Tags
-	)
+
+        [Parameter(Mandatory = $False)]
+        [string[]]$Tag
+    )
 
     BEGIN {
-        $Xpath = $Global:PaDeviceObject.createXPath('address',$Name)
     }
 
     PROCESS {
-
-        $ConfigObject = [PaAddress]::new($Name)
-
-        $ConfigObject.Description = $Description
-        $ConfigObject.Type        = $PsCmdlet.ParameterSetName
-        $ConfigObject.Tags        = $Tags
+        $ShouldProcessMessage = "`r`n"
 
         switch ($PsCmdlet.ParameterSetName) {
-            'ip-netmask' {
-                $ConfigObject.Value = [HelperRegex]::isIpv4($IpNetmask,"IpNetmask must be a valid CIDR range or Ip Address. Ex: 10.0.0.0/16")
+            'name' {
+                $ConfigObject = [PaAddress]::new($Name)
+                continue
             }
-            'ip-range' {
-                $ConfigObject.Value = [HelperRegex]::isIpv4Range($IpRange,"IpRange must be a valid Ip Range. Ex: 192.168.1.1-192.168.1.250")
-            }
-            'fqdn' {
-                $ConfigObject.Value = [HelperRegex]::isFqdn($Fqdn,"Fqdn must be a valid Fully Qualified Domain Name. Ex: contoso.com")
+            'paaddress' {
+                $ConfigObject = $PaAddress
+                continue
             }
         }
 
-        $ElementXml = $ConfigObject.ToXml().address.entry.InnerXml
+        $ShouldProcessMessage += "Modifying object`r`n"
 
-        if ($PSCmdlet.ShouldProcess("Creating new report: $($ConfigObject.Name)")) {
+        if ($Description) {
+            $ConfigObject.Description = $Description
+            $ShouldProcessMessage += "Description: $Description`r`n"
+        }
+
+        if ($Type) {
+            $ConfigObject.Type = $Type
+            $ShouldProcessMessage += "Type: $Type`r`n"
+        }
+        if ($Tag) {
+            if (($ConfigObject.Tags.Count -gt 0) -and ($ConfigObject.Tags[0] -eq '')) {
+                $ConfigObject.Tags = $Tag
+            } else {
+                $ConfigObject.Tags += $Tag
+            }
+
+            $ShouldProcessMessage += "Tags: $($ConfigObject.Tags -join ',')`r`n"
+        }
+
+        #
+        switch ($Type) {
+            'ip-netmask' {
+                $ConfigObject.Value = [HelperRegex]::isIpv4($Value, "IpNetmask must be a valid CIDR range or Ip Address. Ex: 10.0.0.0/16")
+            }
+            'ip-range' {
+                $ConfigObject.Value = [HelperRegex]::isIpv4Range($Value, "IpRange must be a valid Ip Range. Ex: 192.168.1.1-192.168.1.250")
+            }
+            'fqdn' {
+                $ConfigObject.Value = [HelperRegex]::isFqdn($Value, "Fqdn must be a valid Fully Qualified Domain Name. Ex: contoso.com")
+            }
+        }
+
+        $ShouldProcessMessage += "Value: $Value`r`n"
+
+        $ElementXml = $ConfigObject.ToXml().address.entry.InnerXml
+        $Xpath = $Global:PaDeviceObject.createXPath('address', $ConfigObject.Name)
+        $ShouldProcessMessage += "XPath: $XPath"
+
+        if ($PSCmdlet.ShouldProcess($ShouldProcessMessage)) {
             $Set = Invoke-PaApiConfig -Set -Xpath $XPath -Element $ElementXml
 
             $Set

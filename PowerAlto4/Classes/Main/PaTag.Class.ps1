@@ -9,21 +9,25 @@ class PaTag {
     # ToXml
     [Xml] ToXml() {
         [xml]$Doc = New-Object System.Xml.XmlDocument
-        $root = $Doc.CreateNode("element","tag",$null)
-        
+        $root = $Doc.CreateNode("element", "tag", $null)
+
         # Start Entry Node
-        $EntryNode = $Doc.CreateNode("element","entry",$null)
-        $EntryNode.SetAttribute("name",$this.Name)
+        $EntryNode = $Doc.CreateNode("element", "entry", $null)
+        $EntryNode.SetAttribute("name", $this.Name)
 
         # color
-        $PropertyNode = $Doc.CreateNode("element",'color',$null)
-        $PropertyNode.InnerText = $this.GetColorName($this.Color,'Unfriendly')
-        $EntryNode.AppendChild($PropertyNode)
+        if ($this.Color) {
+            $PropertyNode = $Doc.CreateNode("element", 'color', $null)
+            $PropertyNode.InnerText = $this.GetColorName($this.Color, 'Unfriendly')
+            $EntryNode.AppendChild($PropertyNode)
+        }
 
         # comments
-        $PropertyNode = $Doc.CreateNode("element",'comments',$null)
-        $PropertyNode.InnerText = $this.Comments
-        $EntryNode.AppendChild($PropertyNode)
+        if ($this.Comments) {
+            $PropertyNode = $Doc.CreateNode("element", 'comments', $null)
+            $PropertyNode.InnerText = $this.Comments
+            $EntryNode.AppendChild($PropertyNode)
+        }
 
         # Append Entry to Root and Root to Doc
         $root.AppendChild($EntryNode)
@@ -34,17 +38,17 @@ class PaTag {
 
     ##########################
     # GetColorName
-    [string] GetColorName([string]$Color,[string]$ReturnedType) {
-        $Mapping         = @{}
-        $Mapping.color1  = 'Red'
-        $Mapping.color2  = 'Green'
-        $Mapping.color3  = 'Blue'
-        $Mapping.color4  = 'Yellow'
-        $Mapping.color5  = 'Copper'
-        $Mapping.color6  = 'Orange'
-        $Mapping.color7  = 'Purple'
-        $Mapping.color8  = 'Gray'
-        $Mapping.color9  = 'Light Green'
+    [string] GetColorName([string]$Color, [string]$ReturnedType) {
+        $Mapping = @{}
+        $Mapping.color1 = 'Red'
+        $Mapping.color2 = 'Green'
+        $Mapping.color3 = 'Blue'
+        $Mapping.color4 = 'Yellow'
+        $Mapping.color5 = 'Copper'
+        $Mapping.color6 = 'Orange'
+        $Mapping.color7 = 'Purple'
+        $Mapping.color8 = 'Gray'
+        $Mapping.color9 = 'Light Green'
         $Mapping.color10 = 'Cyan'
         $Mapping.color11 = 'Light Gray'
         $Mapping.color12 = 'Blue Gray'
@@ -54,15 +58,15 @@ class PaTag {
         $Mapping.color16 = 'Brown'
         $Mapping.color17 = 'Green'
 
-        $ReturnedName   = $null
-        $FriendlyName   = $null
+        $ReturnedName = $null
+        $FriendlyName = $null
         $UnfriendlyName = $null
         Write-Verbose "color: $Color"
 
         switch ($ReturnedType) {
             'Friendly' {
                 if (($Color -match "color\d{1,2}") -and ($Mapping.Keys -contains $Color)) {
-                    $FriendlyName =  $Mapping.$Color
+                    $FriendlyName = $Mapping.$Color
                     Write-Verbose "color friendly name: $FriendlyName"
                 } elseif ($Mapping.GetEnumerator() | Where-Object { $_.Value -eq $Color}) {
                     $FriendlyName = $Color
@@ -99,10 +103,10 @@ class PaTag {
     PaTag([string]$Name) {
         $this.Name = $Name
     }
-    
+
     # Initiator with color
-    PaTag([string]$Name,[string]$Color) {
-        $this.Name  = $Name
-        $this.Color = $this.GetColorName($Color,"Friendly")
+    PaTag([string]$Name, [string]$Color) {
+        $this.Name = $Name
+        $this.Color = $this.GetColorName($Color, "Friendly")
     }
 }

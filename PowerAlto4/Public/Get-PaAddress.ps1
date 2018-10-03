@@ -1,27 +1,27 @@
 function Get-PaAddress {
-	<#
+    <#
 	.SYNOPSIS
 		Retrieve address objects from Palo Alto device.
-		
+
 	.DESCRIPTION
 		Retrieve address objects from Palo Alto device.
 
     .EXAMPLE
-		
-	.PARAMETER Name
-		
-	#>
-	[CmdletBinding()]
 
-	Param (
-		[Parameter(Mandatory=$False,Position=0)]
-		[string]$Name
-	)
+	.PARAMETER Name
+
+	#>
+    [CmdletBinding()]
+
+    Param (
+        [Parameter(Mandatory = $False, Position = 0)]
+        [string]$Name
+    )
 
     BEGIN {
         $VerbosePrefix = "Get-PaAddress:"
         $XPathNode = 'address'
-        $Xpath = $Global:PaDeviceObject.createXPath($XPathNode,$Name)
+        $Xpath = $Global:PaDeviceObject.createXPath($XPathNode, $Name)
     }
 
     PROCESS {
@@ -37,24 +37,24 @@ function Get-PaAddress {
         $ReturnObject = @()
         foreach ($entry in $Entries) {
             # Initialize Report object, add to returned array
-            $Object        = [PaAddress]::new($entry.name)
+            $Object = [PaAddress]::new($entry.name)
             $ReturnObject += $Object
 
             # Type and Value
             if ($entry.'ip-netmask') {
-                $Object.Type  = 'ip-netmask'
+                $Object.Type = 'ip-netmask'
                 $Object.Value = $entry.'ip-netmask'
             } elseif ($entry.'ip-range') {
-                $Object.Type  = 'ip-range'
+                $Object.Type = 'ip-range'
                 $Object.Value = $entry.'ip-range'
             } elseif ($entry.fqdn) {
-                $Object.Type  = 'fqdn'
+                $Object.Type = 'fqdn'
                 $Object.Value = $entry.'fqdn'
             }
 
             # Add other properties to report
-            $Object.Description  = [HelperXml]::parseCandidateConfigXml($entry.description,$false)
-            $Object.Tags         = [HelperXml]::parseCandidateConfigXml($entry.tag.member,$false)
+            $Object.Description = [HelperXml]::parseCandidateConfigXml($entry.description, $false)
+            $Object.Tags = [HelperXml]::GetMembersFromXml($entry.tag)
         }
 
         $ReturnObject

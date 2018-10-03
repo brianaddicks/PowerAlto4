@@ -30,6 +30,12 @@ Invoke-PaApiConfig [-Set] [-Element] <String> [-XPath] <String>
 Invoke-PaApiConfig [-Move] [-Location] <String> [-XPath] <String> 
 ```
 
+### delete
+
+```powershell
+Invoke-PaApiConfig [-Delete] [-XPath] <String> 
+```
+
 ## Description
 
 Invokes a Palo Alto Config Api.
@@ -141,6 +147,21 @@ Aliases:
 Required: true
 Position: 3
 Default value: 
+Accept pipeline input: false
+Accept wildcard characters: false
+```
+### -Delete
+
+move parameters
+
+```asciidoc
+Type: SwitchParameter
+Parameter Sets: delete
+Aliases: 
+
+Required: true
+Position: 1
+Default value: False
 Accept pipeline input: false
 Accept wildcard characters: false
 ```

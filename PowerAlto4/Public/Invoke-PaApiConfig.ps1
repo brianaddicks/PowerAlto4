@@ -42,6 +42,10 @@ function Invoke-PaApiConfig {
         [Parameter(ParameterSetName = "move", Mandatory = $True, Position = 2)]
         [string]$Location,
 
+        # move parameters
+        [Parameter(ParameterSetName = "delete", Mandatory = $True, Position = 0)]
+        [switch]$Delete,
+
         # all parametersets
         [Parameter(Mandatory = $True, Position = 1)]
         [string]$XPath
@@ -67,6 +71,10 @@ function Invoke-PaApiConfig {
             }
             'move' {
                 $Global:PaDeviceObject.invokeConfigQuery('move', $Xpath, $Location)
+                continue
+            }
+            'delete' {
+                $Global:PaDeviceObject.invokeConfigQuery('delete', $Xpath)
                 continue
             }
         }

@@ -2,30 +2,31 @@ site_name: PowerAlto4 Docs
 theme: readthedocs
 pages:
   - Cmdlets:
-    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
-    - Get-PaSecurityPolicy: cmdlets/Get-PaSecurityPolicy.md
-    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
-    - Get-PaReportJob: cmdlets/Get-PaReportJob.md
-    - New-PaTag: cmdlets/New-PaTag.md
-    - Set-PaAddress: cmdlets/Set-PaAddress.md
-    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
-    - Get-PaUrlCategory: cmdlets/Get-PaUrlCategory.md
+    - Get-PaAddress: cmdlets/Get-PaAddress.md
+    - Move-PaSecurityPolicy: cmdlets/Move-PaSecurityPolicy.md
     - Set-PaTag: cmdlets/Set-PaTag.md
+    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
+    - Get-PaSecurityPolicy: cmdlets/Get-PaSecurityPolicy.md
+    - Get-PaJob: cmdlets/Get-PaJob.md
     - Get-PaCustomReport: cmdlets/Get-PaCustomReport.md
-    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
-    - Set-PaSecurityPolicy: cmdlets/Set-PaSecurityPolicy.md
-    - Set-PaTargetVsys: cmdlets/Set-PaTargetVsys.md
+    - Set-PaAddressGroup: cmdlets/Set-PaAddressGroup.md
     - Get-PaTag: cmdlets/Get-PaTag.md
+    - Get-PaNatPolicy: cmdlets/Get-PaNatPolicy.md
+    - Set-PaAddress: cmdlets/Set-PaAddress.md
+    - Set-PaTargetDeviceGroup: cmdlets/Set-PaTargetDeviceGroup.md
+    - Set-PaUrlCategory: cmdlets/Set-PaUrlCategory.md
+    - Set-PaSecurityPolicy: cmdlets/Set-PaSecurityPolicy.md
     - Get-PaDevice: cmdlets/Get-PaDevice.md
     - Invoke-PaApiReport: cmdlets/Invoke-PaApiReport.md
-    - Get-PaInterface: cmdlets/Get-PaInterface.md
-    - Get-PaAddress: cmdlets/Get-PaAddress.md
-    - Get-PaNatPolicy: cmdlets/Get-PaNatPolicy.md
+    - Invoke-PaApiOperation: cmdlets/Invoke-PaApiOperation.md
+    - New-PaTag: cmdlets/New-PaTag.md
+    - Set-PaTargetVsys: cmdlets/Set-PaTargetVsys.md
+    - Set-PaCustomReport: cmdlets/Set-PaCustomReport.md
+    - Invoke-PaApiConfig: cmdlets/Invoke-PaApiConfig.md
     - Invoke-PaCommit: cmdlets/Invoke-PaCommit.md
+    - Get-PaReportJob: cmdlets/Get-PaReportJob.md
+    - Get-PaInterface: cmdlets/Get-PaInterface.md
+    - Invoke-PaCustomReport: cmdlets/Invoke-PaCustomReport.md
     - Get-PaAddressGroup: cmdlets/Get-PaAddressGroup.md
-    - Set-PaUrlCategory: cmdlets/Set-PaUrlCategory.md
-    - Get-PaConfigDiff: cmdlets/Get-PaConfigDiff.md
-    - Set-PaAddressGroup: cmdlets/Set-PaAddressGroup.md
-    - Set-PaTargetDeviceGroup: cmdlets/Set-PaTargetDeviceGroup.md
-    - Get-PaJob: cmdlets/Get-PaJob.md
+    - Get-PaUrlCategory: cmdlets/Get-PaUrlCategory.md
   - Home: index.md

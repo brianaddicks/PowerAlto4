@@ -1,7 +1,7 @@
 site_name: PowerAlto4 Docs
 theme: readthedocs
 pages:
-  - Home: index.md
+  - Home: README.md
   - Cmdlets:
     - Move-PaSecurityPolicy: cmdlets/Move-PaSecurityPolicy.md
     - Get-PaReportJob: cmdlets/Get-PaReportJob.md

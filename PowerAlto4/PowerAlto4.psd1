@@ -12,7 +12,7 @@
 RootModule = 'PowerAlto4.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.18'
+ModuleVersion = '0.0.19'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -111,11 +111,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Added new cmdlets
-Remove-PaAddress
-Remove-PaAddressGroup
-Remove-PaSecurityPolicy
-Remove-PaTag'
+        ReleaseNotes = 'Corrected tag parsing for Get-PaAddress'
 
         # Prerelease string of this module
         # Prerelease = ''
